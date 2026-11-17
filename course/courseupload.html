@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instructor Course Content - DTET</title>
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="../assets/css/common.css" rel="stylesheet">
+</head>
+<body class="bg-white page-course-courseupload-html">
+  <div id="header-placeholder"></div>
+
+  <main class="container-fluid px-4 py-4">
+    <h1 class="course-title">Course Content &amp; Assignments</h1>
+
+    <div class="row">
+      <section class="col-md-6 panel-column" aria-labelledby="course-heading">
+        <h2 class="panel-tab active" id="course-heading">Course Materials</h2>
+        <form class="week-body" id="materialForm" action="#" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="materialModule">Module</label>
+            <select class="form-control" id="materialModule" name="module_id" required disabled>
+              <option value="" selected>No modules available</option>
+            </select>
+            <small class="form-text text-muted module-empty-state">Add module records before uploading course materials.</small>
+          </div>
+          <div class="form-group">
+            <label for="materialTitle">Material Title</label>
+            <input class="form-control" id="materialTitle" name="title" type="text" required>
+          </div>
+          <div class="form-group">
+            <label for="materialWeek">Week Number</label>
+            <input class="form-control" id="materialWeek" name="week_number" type="number" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="materialFile">Course Material File</label>
+            <input class="form-control-file" id="materialFile" name="material_file" type="file" required>
+            <p class="file-status mb-0" id="materialFileStatus" aria-live="polite"></p>
+          </div>
+          <button class="btn btn-primary btn-sm" type="submit" disabled>Upload Material</button>
+          <small class="form-text text-muted">The server records file_path, file_size_mb, upload_timestamp, and the authenticated instructor ID.</small>
+        </form>
+      </section>
+
+      <section class="col-md-6 panel-column assignment-column" aria-labelledby="assignment-heading">
+        <h2 class="panel-tab" id="assignment-heading">Create Assignment</h2>
+        <div class="assignment-panel">
+          <form class="assignment-details" id="assignmentForm" action="#" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="assignmentModule">Module</label>
+              <select class="form-control" id="assignmentModule" name="module_id" required disabled>
+                <option value="" selected>No modules available</option>
+              </select>
+              <small class="form-text text-muted module-empty-state">Add module records before creating assignments.</small>
+            </div>
+            <div class="form-group">
+              <label for="assignmentTitle">Title</label>
+              <input class="form-control" id="assignmentTitle" name="title" type="text" required>
+            </div>
+            <div class="form-group">
+              <label for="assignmentInstructions">Instructions</label>
+              <textarea class="form-control" id="assignmentInstructions" name="instructions" rows="3" required></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="assignmentWeek">Week Number</label>
+                <input class="form-control" id="assignmentWeek" name="week_number" type="number" min="1" required>
+              </div>
+              <div class="form-group col-6">
+                <label for="assignmentDeadline">Deadline</label>
+                <input class="form-control" id="assignmentDeadline" name="deadline" type="datetime-local" required>
+              </div>
+              <div class="form-group col-6">
+                <label for="fileSizeLimit">File Size Limit (MB)</label>
+                <input class="form-control" id="fileSizeLimit" name="file_size_limit_mb" type="number" min="0.01" step="0.01" required>
+              </div>
+              <div class="form-group col-6">
+                <label for="maximumMarks">Maximum Marks</label>
+                <input class="form-control" id="maximumMarks" name="max_marks" type="number" min="0" step="0.01" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="assignmentFile">Assignment File (optional)</label>
+              <input class="form-control-file" id="assignmentFile" name="assignment_file" type="file">
+              <p class="file-status mb-0" id="assignmentFileStatus" aria-live="polite"></p>
+            </div>
+            <button class="btn btn-primary btn-sm" type="submit" disabled>Create Assignment</button>
+            <small class="form-text text-muted">The server records file_path and created_by_instructor_id from the authenticated instructor account.</small>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/common.js" data-page="course/courseupload.html"></script>
+</body>
+</html>

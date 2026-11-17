@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Learning Activity - DTET</title>
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="../assets/css/common.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100 page-student-trackstudentactivity-html">
+  <div id="header-placeholder"></div>
+
+  <main class="container-fluid px-4 py-4 flex-fill">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+      <div>
+        <h1 class="page-title mb-1">My Learning Activity</h1>
+        <p class="text-muted mb-0">Review your course material and assignment activity.</p>
+      </div>
+      <a class="btn btn-outline-primary mt-2 mt-sm-0" href="../course/mycourses.html">My Courses</a>
+    </div>
+
+    <!-- <div class="alert alert-info" role="note">
+      This page shows records from ACTIVITY_LOGS for the signed-in student. The server must identify the student from
+      the authenticated session and return only that user's records; it must not rely on a user ID supplied by the browser.
+    </div> -->
+    <div class="alert d-none" id="activityStatus" role="status" aria-live="polite"></div>
+
+    <section class="row mb-3" aria-label="Activity summary">
+      <div class="col-md-4 mb-3">
+        <div class="card activity-card shadow-sm">
+          <div class="card-body">
+            <h2 class="h6 text-muted">Matching activity</h2>
+            <p class="activity-count mb-0" id="totalCount">—</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card activity-card shadow-sm">
+          <div class="card-body">
+            <h2 class="h6 text-muted">Material activity</h2>
+            <p class="activity-count mb-0" id="materialCount">—</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card activity-card shadow-sm">
+          <div class="card-body">
+            <h2 class="h6 text-muted">Assignment activity</h2>
+            <p class="activity-count mb-0" id="assignmentCount">—</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card shadow-sm" aria-labelledby="activityHeading">
+      <div class="card-header bg-white">
+        <h2 class="h5 mb-0" id="activityHeading">Activity log</h2>
+      </div>
+      <div class="card-body border-bottom">
+        <div class="form-row align-items-end">
+          <div class="form-group col-md-4">
+            <label for="actionFilter">Action</label>
+            <select class="form-control" id="actionFilter">
+              <option value="">All actions</option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+            <label for="fromDate">From</label>
+            <input class="form-control" id="fromDate" type="date">
+          </div>
+          <div class="form-group col-md-3">
+            <label for="toDate">To</label>
+            <input class="form-control" id="toDate" type="date">
+          </div>
+          <div class="form-group col-md-2 filter-actions">
+            <button class="btn btn-primary" type="button" id="applyFilters">Filter</button>
+            <button class="btn btn-outline-secondary" type="button" id="clearFilters">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover activity-table mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Date &amp; time</th>
+              <th scope="col">Action</th>
+              <th scope="col">Material ID</th>
+              <th scope="col">Assignment ID</th>
+              <th scope="col">IP address</th>
+            </tr>
+          </thead>
+          <tbody id="activityRows">
+            <tr><td class="empty-state" colspan="5">Loading your activity…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/common.js" data-page="student/trackstudentactivity.html"></script>
+</body>
+</html>

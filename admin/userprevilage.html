@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Privileges - DTET</title>
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="../assets/css/common.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100 page-admin-userprevilage-html">
+  <div id="header-placeholder"></div>
+
+  <main class="container-fluid px-4 py-4 flex-fill">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+      <div>
+        <h1 class="page-title mb-1">Form Access by Role</h1>
+        <p class="text-muted mb-0">Choose which roles can access each form.</p>
+      </div>
+      <span class="badge badge-primary">Admin only</span>
+    </div>
+
+    <!-- <div class="alert alert-info" role="note">
+      These selections are saved in this browser only. The server must enforce actual role access.
+    </div> -->
+    <div class="alert d-none" id="pageStatus" role="status" aria-live="polite"></div>
+
+    <section class="card shadow-sm" aria-labelledby="formAccessHeading">
+      <div class="card-header bg-white">
+        <h2 class="h5 mb-0" id="formAccessHeading">HTML Forms</h2>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover form-access-table mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th class="form-access-name" scope="col">HTML Form</th>
+              <th scope="col">Student</th>
+              <th scope="col">Instructor</th>
+              <th scope="col">Administrator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../login.html">Login</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="login" data-role="student" aria-label="Student access to Login" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="login" data-role="instructor" aria-label="Instructor access to Login" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="login" data-role="admin" aria-label="Administrator access to Login" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="signup.html">Create account</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="signup" data-role="student" aria-label="Student access to Create account" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="signup" data-role="instructor" aria-label="Instructor access to Create account" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="signup" data-role="admin" aria-label="Administrator access to Create account" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="resetcredentials.html">Request password reset</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="reset-password" data-role="student" aria-label="Student access to Request password reset" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="reset-password" data-role="instructor" aria-label="Instructor access to Request password reset" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="reset-password" data-role="admin" aria-label="Administrator access to Request password reset" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="studentprofile.html">Student profile</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-profile" data-role="student" aria-label="Student access to Student profile"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-profile" data-role="instructor" aria-label="Instructor access to Student profile"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-profile" data-role="admin" aria-label="Administrator access to Student profile" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="instructorprofile.html">Instructor profile</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-profile" data-role="student" aria-label="Student access to Instructor profile"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-profile" data-role="instructor" aria-label="Instructor access to Instructor profile"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-profile" data-role="admin" aria-label="Administrator access to Instructor profile" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.html#courseForm">Course</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="course" data-role="student" aria-label="Student access to Course"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="course" data-role="instructor" aria-label="Instructor access to Course"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="course" data-role="admin" aria-label="Administrator access to Course" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.html#semesterForm">Semester</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="semester" data-role="student" aria-label="Student access to Semester"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="semester" data-role="instructor" aria-label="Instructor access to Semester"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="semester" data-role="admin" aria-label="Administrator access to Semester" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.html#moduleForm">Module</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="module" data-role="student" aria-label="Student access to Module"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="module" data-role="instructor" aria-label="Instructor access to Module"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="module" data-role="admin" aria-label="Administrator access to Module" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../course/courseupload.html#materialForm">Upload course material</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="material-upload" data-role="student" aria-label="Student access to Upload course material"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="material-upload" data-role="instructor" aria-label="Instructor access to Upload course material" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="material-upload" data-role="admin" aria-label="Administrator access to Upload course material"></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../course/courseupload.html#assignmentForm">Create assignment</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-create" data-role="student" aria-label="Student access to Create assignment"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-create" data-role="instructor" aria-label="Instructor access to Create assignment" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-create" data-role="admin" aria-label="Administrator access to Create assignment"></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../course/course.html#submissionTitle">Submit assignment</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-submit" data-role="student" aria-label="Student access to Submit assignment" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-submit" data-role="instructor" aria-label="Instructor access to Submit assignment"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-submit" data-role="admin" aria-label="Administrator access to Submit assignment"></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../student/studentenrolement.html">Student module enrollment</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-module-enrollment" data-role="student" aria-label="Student access to Student module enrollment"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-module-enrollment" data-role="instructor" aria-label="Instructor access to Student module enrollment"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-module-enrollment" data-role="admin" aria-label="Administrator access to Student module enrollment" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../instructor/instructorenrolement.html">Instructor module assignment</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-module-assignment" data-role="student" aria-label="Student access to Instructor module assignment"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-module-assignment" data-role="instructor" aria-label="Instructor access to Instructor module assignment"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-module-assignment" data-role="admin" aria-label="Administrator access to Instructor module assignment" checked></td>
+            </tr>
+            <tr>
+              <th class="form-access-name" scope="row"><a href="../instructor/studentinteraction.html">Student interaction report</a></th>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-interaction-report" data-role="student" aria-label="Student access to Student interaction report"></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-interaction-report" data-role="instructor" aria-label="Instructor access to Student interaction report" checked></td>
+              <td><input class="form-access-checkbox" type="checkbox" data-form="student-interaction-report" data-role="admin" aria-label="Administrator access to Student interaction report" checked></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/common.js" data-page="admin/userprevilage.html"></script>
+</body>
+</html>

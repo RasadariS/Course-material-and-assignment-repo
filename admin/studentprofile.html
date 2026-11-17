@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Profile - DTET</title>
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/css/common.css" rel="stylesheet">
+</head>
+<body class="bg-white page-admin-studentprofile-html">
+  <div id="header-placeholder"></div>
+
+  <main class="container py-4">
+    <h1 class="page-title mb-4">Student Profile</h1>
+
+    <form class="profile-card card border-0 shadow-sm p-4" action="#" method="post" enctype="multipart/form-data">
+      <div class="photo-section mb-4">
+        <img class="profile-photo" id="profilePhoto" src="../assets/images/person-fill.svg" alt="Student profile photo">
+        <label class="photo-label" for="photoUpload">Profile Photo</label>
+        <input class="form-control-file photo-input" id="photoUpload" name="photo" type="file" accept="image/*">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="nic">NIC</label>
+          <input class="form-control" id="nic" name="nic_number" type="text" autocomplete="off">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="studentName">Full Name</label>
+          <input class="form-control" id="studentName" name="full_name" type="text" autocomplete="name">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="registrationNumber">Registration Number</label>
+          <input class="form-control" id="registrationNumber" name="registration_number" type="text">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="intakeYear">Intake Year</label>
+          <input class="form-control" id="intakeYear" name="intake_year" type="number" min="1900" max="2100">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="contactNumber">Contact Number</label>
+          <input class="form-control" id="contactNumber" name="contact_number" type="tel" autocomplete="tel">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="emailAddress">Email Address</label>
+          <input class="form-control" id="emailAddress" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="form-group col-md-6 mb-0">
+          <label for="role">Account Type</label>
+          <input class="form-control" id="role" name="role" type="text" value="student" readonly>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="profile-button profile-button-view" id="viewProfile" type="button">View</button>
+        <button class="profile-button profile-button-edit" type="button">Edit</button>
+        <button class="profile-button profile-button-update" type="button">Update</button>
+        <button class="profile-button profile-button-delete" type="button">Delete</button>
+      </div>
+    </form>
+    <div class="alert alert-danger mt-3 d-none" id="profileError" role="alert"></div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/common.js" data-page="admin/studentprofile.html"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1024">
+  <title>5S2NVQ901 - Home Gardening</title>
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="../assets/css/common.css" rel="stylesheet">
+</head>
+<body class="bg-white page-course-course-html">
+
+<div id="header-placeholder"></div>
+
+<main class="container-fluid px-5 py-4">
+
+  <section class="course-details mb-4" aria-labelledby="courseTitle">
+    <h1 class="course-title mb-3" id="courseTitle">Home Gardening</h1>
+    <dl class="row mb-0">
+      <dt class="col-sm-4">Course Code</dt>
+      <dd class="col-sm-8" id="courseCode">5S2NVQ901</dd>
+
+      <dt class="col-sm-4">Duration (months)</dt>
+      <dd class="col-sm-8" id="courseDuration">Not provided</dd>
+
+      <dt class="col-sm-4">Total Semesters</dt>
+      <dd class="col-sm-8" id="courseTotalSemesters">Not provided</dd>
+    </dl>
+  </section>
+
+  <ul class="nav nav-tabs" id="courseTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="course-tab" data-bs-toggle="tab" data-bs-target="#coursePane"
+              type="button" role="tab" aria-controls="coursePane" aria-selected="true">Course</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="assignment-tab" data-bs-toggle="tab" data-bs-target="#assignmentPane"
+              type="button" role="tab" aria-controls="assignmentPane" aria-selected="false">Assignment</button>
+    </li>
+  </ul>
+
+  <div class="tab-content pt-3">
+    <section class="tab-pane fade show active" id="coursePane" role="tabpanel" aria-labelledby="course-tab" tabindex="0">
+      <section class="week-list p-3" aria-labelledby="courseContentTitle">
+        <h2 class="h5 mb-2" id="courseContentTitle">Semesters, Modules &amp; Course Materials</h2>
+        <p class="schema-empty-state mb-0" role="status">
+          No semester records are available for this course yet. Modules and their course materials will appear here when added.
+        </p>
+      </section>
+    </section>
+
+    <section class="tab-pane fade" id="assignmentPane" role="tabpanel" aria-labelledby="assignment-tab" tabindex="0">
+      <div class="assignment-panel">
+        <section aria-labelledby="assignmentDetailsTitle">
+          <div class="assignment-head mb-3">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 1.5A1.5 1.5 0 0 0 2.5 3v10A1.5 1.5 0 0 0 4 14.5h8a1.5 1.5 0 0 0 1.5-1.5V5.2L9.8 1.5H4Zm5 .7L12.3 5H9V2.2ZM4 2.5h4V6h4.5v7a.5.5 0 0 1-.5.5H4a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5Zm1.5 5v1h5v-1h-5Zm0 2.5v1h5v-1h-5Z"/>
+            </svg>
+            <h2 class="h6 mb-0" id="assignmentDetailsTitle">Assignment Details</h2>
+          </div>
+
+          <p class="schema-empty-state" role="status">No assignments are available for this course yet.</p>
+          <dl class="row assignment-info">
+            <dt class="col-sm-4">Title</dt>
+            <dd class="col-sm-8">Not available</dd>
+            <dt class="col-sm-4">Module</dt>
+            <dd class="col-sm-8">Not available</dd>
+            <dt class="col-sm-4">Week Number</dt>
+            <dd class="col-sm-8">Not available</dd>
+            <dt class="col-sm-4">Instructions</dt>
+            <dd class="col-sm-8">Not available</dd>
+            <dt class="col-sm-4">Assignment File</dt>
+            <dd class="col-sm-8">Not available</dd>
+            <dt class="col-sm-4">File Size (MB)</dt>
+            <dd class="col-sm-8">Not available</dd>
+            <dt class="col-sm-4">Deadline</dt>
+            <dd class="col-sm-8">Not available</dd>
+            <dt class="col-sm-4">Maximum Marks</dt>
+            <dd class="col-sm-8">Not available</dd>
+          </dl>
+        </section>
+
+        <hr>
+
+        <section aria-labelledby="submissionTitle">
+          <h2 class="h6 mb-3" id="submissionTitle">Your Submission</h2>
+          <p class="schema-empty-state" id="submissionStatus" role="status">
+            No submission is recorded. Submission is unavailable until an assignment is added.
+          </p>
+          <form action="#" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="submissionFile">Submission File</label>
+              <input class="form-control-file" id="submissionFile" name="submission_file"
+                     type="file" disabled aria-describedby="submissionHelp">
+              <small class="form-text text-muted" id="submissionHelp">
+                The server records the saved file path, file size, timestamp, and whether it was submitted late.
+              </small>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary" disabled>Submit Assignment</button>
+          </form>
+
+          <dl class="row assignment-info mt-3 mb-0">
+            <dt class="col-sm-4">Submission File</dt>
+            <dd class="col-sm-8">Not submitted</dd>
+            <dt class="col-sm-4">File Size (MB)</dt>
+            <dd class="col-sm-8">Not submitted</dd>
+            <dt class="col-sm-4">Submitted At</dt>
+            <dd class="col-sm-8">Not submitted</dd>
+            <dt class="col-sm-4">Marks Obtained</dt>
+            <dd class="col-sm-8">Not graded</dd>
+            <dt class="col-sm-4">Graded By</dt>
+            <dd class="col-sm-8">Not graded</dd>
+            <dt class="col-sm-4">Feedback</dt>
+            <dd class="col-sm-8">No feedback</dd>
+            <dt class="col-sm-4">Late Submission</dt>
+            <dd class="col-sm-8">Not applicable</dd>
+          </dl>
+        </section>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script src="../assets/js/common.js" data-page="course/course.html"></script>
+</body>
+</html>

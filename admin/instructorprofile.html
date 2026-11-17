@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instructor Profile - DTET</title>
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/css/common.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex flex-column min-vh-100 page-admin-instructorprofile-html">
+  <div id="header-placeholder"></div>
+
+  <main class="container py-4 flex-fill">
+    <h1 class="h3 font-weight-bold mb-4">Instructor Profile</h1>
+
+    <form class="card shadow-sm mx-auto common-inline-admin-instructorprofile-html-1" action="#" method="post" enctype="multipart/form-data">
+      <div class="card-body p-4">
+        <div class="text-center mb-4">
+          <img class="rounded-circle border bg-light mb-2 common-inline-admin-instructorprofile-html-2" id="profilePhoto"
+               src="../assets/images/person-fill.svg" alt="Instructor profile photo"
+               width="120" height="120">
+          <label class="d-block font-weight-bold mb-2" for="photoUpload">Profile Photo</label>
+          <input class="form-control-file" id="photoUpload" name="photo" type="file" accept="image/*">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="nic">NIC</label>
+            <input class="form-control" id="nic" name="nic_number" type="text" autocomplete="off">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="instructorName">Name</label>
+            <input class="form-control" id="instructorName" name="full_name" type="text" autocomplete="name">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="contactNumber">Contact Number</label>
+            <input class="form-control" id="contactNumber" name="contact_number" type="tel" autocomplete="tel">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="emailAddress">Email Address</label>
+            <input class="form-control" id="emailAddress" name="email" type="email" autocomplete="email">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="employeeCode">Employee Code</label>
+            <input class="form-control" id="employeeCode" name="employee_code" type="text">
+          </div>
+          <div class="form-group col-md-6 mb-0">
+            <label for="department">Department</label>
+            <input class="form-control" id="department" name="department" type="text">
+          </div>
+          <div class="form-group col-md-6 mb-0">
+            <label for="role">Account Type</label>
+            <input class="form-control" id="role" name="role" type="text" value="instructor" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer bg-white d-flex justify-content-end flex-wrap">
+        <button class="btn btn-secondary mr-2 mb-1" id="viewInstructorProfile" type="button">View</button>
+        <button class="btn btn-primary mr-2 mb-1" type="button">Edit</button>
+        <button class="btn btn-success mr-2 mb-1" type="button">Update</button>
+        <button class="btn btn-danger mb-1" type="button">Delete</button>
+      </div>
+    </form>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/common.js" data-page="admin/instructorprofile.html"></script>
+</body>
+</html>

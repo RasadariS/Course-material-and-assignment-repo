@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - DTET</title>
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="assets/css/common.css" rel="stylesheet">
+</head>
+<body class="page-login-html">
+  <main class="login-card" aria-label="Login">
+    <img class="image-placeholder" src="assets/images/DTET logo.jpg" alt="DTET Sri Lanka logo">
+
+    <form class="login-form" action="#" method="post">
+      <div class="field-group">
+        <div class="field-control">
+          <label for="loginName">User Name</label>
+          <input id="loginName" name="loginName" type="text" value="WA/26/A01T003/1/0001"
+                 autocomplete="username" aria-describedby="loginNameHelp">
+          <button class="clear-field" type="button" aria-label="Clear user name" data-clear="loginName">&times;</button>
+        </div>
+        <p class="field-help" id="loginNameHelp">Registration Number</p>
+      </div>
+
+      <div class="field-group">
+        <div class="field-control">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" value="password123"
+                 autocomplete="current-password" aria-describedby="passwordHelp">
+          <button class="clear-field" type="button" aria-label="Clear password" data-clear="password">&times;</button>
+        </div>
+        <p class="field-help" id="passwordHelp">Type your password</p>
+      </div>
+
+      <button class="btn-login" type="submit">Login</button>
+      <a class="forgot-password" href="admin/resetcredentials.html">Forgot your password?</a>
+    </form>
+  </main>
+
+  <script src="assets/js/common.js" data-page="login.html"></script>
+</body>
+</html>
