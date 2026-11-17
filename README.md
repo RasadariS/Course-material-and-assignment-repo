@@ -5,4 +5,6 @@ MIT4301 Independent Study_Topic Number 18. Course Material and Assignment Reposi
 
 Open `login.php` through XAMPP/Apache. It accepts an email address or NIC from the `users` table, verifies `password_hash` with PHP's `password_verify()`, and sets `user_id`, `full_name`, and `role` in the PHP session. Existing account passwords must have been stored with `password_hash()`; plain-text passwords are not accepted.
 
-The login page links to the existing signup form at `admin/signup.html`. Database connection settings default to `localhost`, database `course_repository_db`, MySQL user `root`, and an empty password; set `DB_HOST`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` environment variables to override them.
+The login page links to `admin/signup.php`. Database connection settings default to `localhost`, database `course_repository_db`, MySQL user `root`, and an empty password; set `DB_HOST`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` environment variables to override them.
+
+The signup page creates a user and the matching student or instructor row in one transaction. It resolves `role_id` from the `roles` table and does not allow public administrator registration.

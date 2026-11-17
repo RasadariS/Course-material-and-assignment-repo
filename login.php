@@ -20,6 +20,7 @@ if (empty($_SESSION['login_csrf'])) {
 
 $errorMessage = '';
 $identifier = '';
+$registrationSuccess = ($_GET['registered'] ?? '') === '1';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $submittedToken = $_POST['csrf_token'] ?? '';
@@ -93,6 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php if ($errorMessage !== ''): ?>
         <div class="alert alert-danger" role="alert"><?php echo loginEscapeHtml($errorMessage); ?></div>
       <?php endif; ?>
+      <?php if ($registrationSuccess): ?>
+        <div class="alert alert-success" role="status">Your account was created. Sign in to continue.</div>
+      <?php endif; ?>
       <div class="field-group">
         <div class="field-control">
           <label for="loginName">Email or NIC</label>
@@ -116,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <button class="btn-login" type="submit">Login</button>
       <a class="forgot-password" href="admin/resetcredentials.html">Forgot your password?</a>
-      <p class="mt-3 mb-0 text-center">Don't have an account? <a href="admin/signup.html">Sign up</a></p>
+      <p class="mt-3 mb-0 text-center">Don't have an account? <a href="admin/signup.php">Sign up</a></p>
     </form>
   </main>
 

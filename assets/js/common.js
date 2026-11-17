@@ -130,7 +130,7 @@
   
     },
     // Form/page: Administrator signup form
-    'admin/signup.html': function () {
+    'admin/signup.php': function () {
     var accountType = document.getElementById('accountType');
     var photoUpload = document.getElementById('photoUpload');
     var profilePhoto = document.getElementById('profilePhoto');
@@ -150,8 +150,7 @@
           document.getElementById('employeeCode'),
           document.getElementById('department')
         ]
-      },
-      admin: null
+      }
     };
 
     function updateRoleFields() {
