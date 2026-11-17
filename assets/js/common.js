@@ -2,7 +2,7 @@
   var page = document.currentScript.getAttribute('data-page');
   var initializers = {
     // Form/page: Instructor profile form
-    'admin/instructorprofile.html': function () {
+    'admin/instructorprofile.php': function () {
     var photoUpload = document.getElementById('photoUpload');
     var profilePhoto = document.getElementById('profilePhoto');
     var photoPreviewUrl;
@@ -19,18 +19,17 @@
 
     document.getElementById('viewInstructorProfile').addEventListener('click', function () {
       var profile = {
-        nic_number: document.getElementById('nic').value.trim(),
-        full_name: document.getElementById('instructorName').value.trim(),
-        contact_number: document.getElementById('contactNumber').value.trim(),
-        email: document.getElementById('emailAddress').value.trim(),
         employee_code: document.getElementById('employeeCode').value.trim(),
         department: document.getElementById('department').value.trim(),
-        role: document.getElementById('role').value
+        role: 'instructor'
       };
       var photo = photoUpload.files.length ? photoUpload.files[0] : null;
 
       function openProfile(photoData) {
         if (photoData) profile.photo = photoData;
+        else if (profilePhoto.getAttribute('src').indexOf('../uploads/instructors/') === 0) {
+          profile.photo = profilePhoto.getAttribute('src');
+        }
         try {
           sessionStorage.setItem('instructorProfileView', JSON.stringify(profile));
           window.location.href = 'instructorprofileview.html';
@@ -91,16 +90,12 @@
     }
 
     if (profile && typeof profile === 'object') {
-      document.getElementById('profileName').textContent = profile.full_name || 'Instructor details';
-      document.getElementById('profileNic').textContent = profile.nic_number || 'Not provided';
-      document.getElementById('profileContactNumber').textContent = profile.contact_number || 'Not provided';
-      document.getElementById('profileEmail').textContent = profile.email || 'Not provided';
+      document.getElementById('profileName').textContent = 'Instructor profile';
       document.getElementById('profileEmployeeCode').textContent = profile.employee_code || 'Not provided';
       document.getElementById('profileDepartment').textContent = profile.department || 'Not provided';
-      document.getElementById('profileRole').textContent =
-        profile.role === 'instructor' ? 'Instructor' : profile.role || 'Instructor';
 
-      if (typeof profile.photo === 'string' && profile.photo.indexOf('data:image/') === 0) {
+      if (typeof profile.photo === 'string' &&
+          (profile.photo.indexOf('data:image/') === 0 || profile.photo.indexOf('../uploads/instructors/') === 0)) {
         document.getElementById('profilePhoto').src = profile.photo;
       }
     } else {
@@ -1547,7 +1542,7 @@
 	
     },
     // Form/page: Login form
-    'login.html': function () {
+    'login.php': function () {
     document.querySelectorAll('[data-clear]').forEach(function (button) {
       button.addEventListener('click', function () {
         var input = document.getElementById(button.getAttribute('data-clear'));

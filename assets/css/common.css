@@ -399,7 +399,7 @@ body.page-instructor-studentinteraction-html { min-height: 100vh; display: flex;
 .common-inline-layouts-header-html-1 { width: 22px; height: 22px; cursor: pointer; }
 /* Form/page: Shared header (layouts/header.html). */
 .common-inline-layouts-header-html-2 { width: 20px; height: 20px; }
-/* Form/page: Login form (login.html). */
+/* Form/page: Login form (login.php). */
 body.page-login-html * { box-sizing: border-box; }
     body.page-login-html {
       min-height: 100vh;
