@@ -10,7 +10,7 @@ function signupEscapeHtml($value): string
 
 function removeSignupPhoto(?string $relativePath): bool
 {
-  if (!$relativePath || !preg_match('#^uploads/(students|instructors)/[a-f0-9]{32}\.(jpg|png|gif|webp)$#D', $relativePath)) {
+  if (!$relativePath || !preg_match('#^uploads/(students|instructors|admins)/[a-f0-9]{32}\.(jpg|png|gif|webp)$#D', $relativePath)) {
     return true;
   }
 
@@ -27,7 +27,14 @@ if (empty($_SESSION['signup_csrf'])) {
   $_SESSION['signup_csrf'] = bin2hex(random_bytes(32));
 }
 
+$signedInUserId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+$isAdministrator = $signedInUserId !== false && in_array(
+  strtolower((string) ($_SESSION['role'] ?? '')),
+  ['admin', 'administrator', 'system administrator'],
+  true
+);
 $errorMessage = '';
+$administratorCreated = $isAdministrator && ($_GET['administrator_created'] ?? '') === '1';
 $account = [
   'role' => '',
   'full_name' => '',
@@ -65,8 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
       if ($errorMessage === '') {
-        if (!in_array($account['role'], ['student', 'instructor'], true)) {
-          throw new RuntimeException('Choose Student or Instructor as the account type.');
+        if (!in_array($account['role'], ['student', 'instructor', 'admin'], true)) {
+          throw new RuntimeException('Choose a valid account type.');
+        }
+        if ($account['role'] === 'admin' && !$isAdministrator) {
+          http_response_code(403);
+          throw new RuntimeException('Only a signed-in administrator can create administrator accounts.');
         }
         if ($account['full_name'] === '' || strlen($account['full_name']) > 150) {
           throw new RuntimeException('Full name is required and must be 150 characters or fewer.');
@@ -101,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
           $roleName = 'Student';
           $photoDirectoryName = 'students';
-        } else {
+        } elseif ($account['role'] === 'instructor') {
           if ($account['employee_code'] === '' || strlen($account['employee_code']) > 50) {
             throw new RuntimeException('Employee code is required and must be 50 characters or fewer.');
           }
@@ -110,6 +121,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
           $roleName = 'Instructor';
           $photoDirectoryName = 'instructors';
+        } else {
+          $roleName = 'Admin';
+          $photoDirectoryName = 'admins';
         }
 
         $pdo = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
@@ -125,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           if ($duplicateRegistration->fetch()) {
             throw new RuntimeException('That registration number is already assigned to a student.');
           }
-        } else {
+        } elseif ($account['role'] === 'instructor') {
           $duplicateEmployeeCode = $pdo->prepare('SELECT instructor_id FROM instructors WHERE employee_code = ? LIMIT 1');
           $duplicateEmployeeCode->execute([$account['employee_code']]);
           if ($duplicateEmployeeCode->fetch()) {
@@ -133,8 +147,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         }
 
-        $roleQuery = $pdo->prepare('SELECT role_id FROM roles WHERE role_name = ? LIMIT 1');
-        $roleQuery->execute([$roleName]);
+        if ($account['role'] === 'admin') {
+          $roleQuery = $pdo->prepare(
+            "SELECT role_id FROM roles
+             WHERE LOWER(role_name) IN ('admin', 'administrator', 'system administrator')
+             LIMIT 1"
+          );
+          $roleQuery->execute();
+        } else {
+          $roleQuery = $pdo->prepare('SELECT role_id FROM roles WHERE role_name = ? LIMIT 1');
+          $roleQuery->execute([$roleName]);
+        }
         $roleId = $roleQuery->fetchColumn();
         if ($roleId === false) {
           throw new RuntimeException('The selected account role is not configured in the database.');
@@ -201,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               $semester,
               $profilePhotoPath,
             ]);
-          } else {
+          } elseif ($account['role'] === 'instructor') {
             $insertProfile = $pdo->prepare(
               'INSERT INTO instructors (user_id, employee_code, department, profile_photo)
                VALUES (?, ?, ?, ?)'
@@ -210,6 +233,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               $userId,
               $account['employee_code'],
               $account['department'],
+              $profilePhotoPath,
+            ]);
+          } else {
+            $insertProfile = $pdo->prepare(
+              'INSERT INTO system_administrators (user_id, access_level, profile_photo)
+               VALUES (?, ?, ?)'
+            );
+            $insertProfile->execute([
+              $userId,
+              'System Administrator',
               $profilePhotoPath,
             ]);
           }
@@ -224,7 +257,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           throw $error;
         }
 
-        header('Location: ../login.php?registered=1');
+        if ($account['role'] === 'admin') {
+          header('Location: signup.php?administrator_created=1');
+        } else {
+          header('Location: ../login.php?registered=1');
+        }
         exit;
       }
     } catch (RuntimeException $exception) {
@@ -259,12 +296,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if ($errorMessage !== ''): ?>
           <div class="alert alert-danger" role="alert"><?php echo signupEscapeHtml($errorMessage); ?></div>
         <?php endif; ?>
+        <?php if ($administratorCreated): ?>
+          <div class="alert alert-success" role="status">Administrator account created successfully.</div>
+        <?php endif; ?>
         <div class="form-group">
           <label class="font-weight-bold" for="accountType">Account Type</label>
           <select class="form-control" id="accountType" name="role" required>
             <option value=""<?php echo $account['role'] === '' ? ' selected' : ''; ?> disabled>Select account type</option>
             <option value="student"<?php echo $account['role'] === 'student' ? ' selected' : ''; ?>>Student</option>
             <option value="instructor"<?php echo $account['role'] === 'instructor' ? ' selected' : ''; ?>>Instructor</option>
+            <?php if ($isAdministrator): ?>
+              <option value="admin"<?php echo $account['role'] === 'admin' ? ' selected' : ''; ?>>Administrator</option>
+            <?php endif; ?>
           </select>
         </div>
 

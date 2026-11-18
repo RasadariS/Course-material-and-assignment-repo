@@ -14,7 +14,7 @@ if ($userId === false) {
   header('Location: ../login.php');
   exit;
 }
-if ($userRole !== 'admin') {
+if (!in_array($userRole, ['admin', 'administrator', 'system administrator'], true)) {
   http_response_code(403);
   $errorMessage = 'This page is available to administrator accounts only.';
   $profile = null;
@@ -25,8 +25,8 @@ if ($userRole !== 'admin') {
       'SELECT u.full_name, u.nic_number, u.email, u.contact_number,
               a.access_level, a.profile_photo
        FROM users u
-       INNER JOIN admins a ON a.user_id = u.user_id
-       WHERE u.user_id = ? AND LOWER(u.role) = \'admin\'
+       INNER JOIN system_administrators a ON a.user_id = u.user_id
+       WHERE u.user_id = ? AND LOWER(u.role) IN (\'admin\', \'administrator\', \'system administrator\')
        LIMIT 1'
     );
     $lookup->execute([$userId]);

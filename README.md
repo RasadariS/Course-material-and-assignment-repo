@@ -7,6 +7,8 @@ Open `login.php` through XAMPP/Apache. It accepts an email address or NIC from t
 
 The login page links to `admin/signup.php`. Database connection settings default to `localhost`, database `course_repository_db`, MySQL user `root`, and an empty password; set `DB_HOST`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` environment variables to override them.
 
-The signup page creates a user and the matching student or instructor row in one transaction. It resolves `role_id` from the `roles` table and does not allow public administrator registration.
+The signup page creates a user and its matching student or instructor row in one transaction. Only signed-in administrators can select Administrator; that account and its `system_administrators` row are created transactionally. Public administrator registration is blocked.
+
+Existing databases missing the `system_administrators` table can apply `database/create_system_administrators_table.sql` in phpMyAdmin or the MySQL command line. To preserve rows from an older `admins` table, apply `database/migrate_admins_to_system_administrators.sql` after creating the new table.
 
 Signed-in instructors can open `admin/instructorprofile.html` to view and edit their own profile. Updates are validated and saved to the `users` and `instructors` tables; profile photos are optional.
