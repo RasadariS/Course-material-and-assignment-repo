@@ -8,6 +8,9 @@ $userId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['option
 $userRole = strtolower((string) ($_SESSION['role'] ?? ''));
 $profilePath = $headerBasePath . 'login.php';
 if ($userId !== false) {
+  if (empty($_SESSION['logout_csrf'])) {
+    $_SESSION['logout_csrf'] = bin2hex(random_bytes(32));
+  }
   if ($userRole === 'student') {
     $profilePath = $headerBasePath . 'admin/studentprofile.html';
   } elseif ($userRole === 'instructor') {
@@ -45,6 +48,14 @@ $headerEscape = function ($value) {
             <img src="<?php echo $headerEscape($headerBasePath . 'assets/images/person-fill.svg'); ?>" alt="User profile" class="common-inline-layouts-header-html-2">
           </a>
         </li>
+        <?php if ($userId !== false): ?>
+          <li class="nav-item">
+            <form action="<?php echo $headerEscape($headerBasePath . 'logout.php'); ?>" method="post" class="mb-0">
+              <input type="hidden" name="csrf_token" value="<?php echo $headerEscape($_SESSION['logout_csrf']); ?>">
+              <button class="nav-link btn btn-link px-3" type="submit">Logout</button>
+            </form>
+          </li>
+        <?php endif; ?>
       </ul>
 
     </div>
