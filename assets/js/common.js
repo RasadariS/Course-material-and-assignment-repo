@@ -188,12 +188,16 @@
         });
     }
 
-    loadPartial('header-placeholder', '../layouts/header.html');
+    loadPartial('header-placeholder', '../layouts/header.php');
     loadPartial('footer-placeholder', '../layouts/footer.html', function () {
       var footerYear = document.getElementById('footerYear');
       if (footerYear) footerYear.textContent = new Date().getFullYear();
     });
   
+    },
+    'admin/adminprofile.php': function () {
+      var footerYear = document.getElementById('footerYear');
+      if (footerYear) footerYear.textContent = new Date().getFullYear();
     },
     // Form/page: Instructor profile view
     'admin/instructorprofileview.html': function () {
@@ -242,7 +246,7 @@
         });
     }
 
-    loadPartial('header-placeholder', '../layouts/header.html');
+    loadPartial('header-placeholder', '../layouts/header.php');
     loadPartial('footer-placeholder', '../layouts/footer.html', function () {
       var footerYear = document.getElementById('footerYear');
       if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -328,7 +332,7 @@
         });
     }
 
-    loadPartial('header-placeholder', '../layouts/header.html');
+    loadPartial('header-placeholder', '../layouts/header.php');
     loadPartial('footer-placeholder', '../layouts/footer.html', function () {
       var footerYear = document.getElementById('footerYear');
       if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -406,7 +410,7 @@
         });
     }
 
-    loadPartial('header-placeholder', '../layouts/header.html');
+    loadPartial('header-placeholder', '../layouts/header.php');
     loadPartial('footer-placeholder', '../layouts/footer.html', function () {
       var footerYear = document.getElementById('footerYear');
       if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -457,7 +461,7 @@
         });
     }
 
-    loadPartial('header-placeholder', '../layouts/header.html');
+    loadPartial('header-placeholder', '../layouts/header.php');
     loadPartial('footer-placeholder', '../layouts/footer.html', function () {
       var footerYear = document.getElementById('footerYear');
       if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -526,7 +530,7 @@
           });
       }
 
-      loadPartial('header-placeholder', '../layouts/header.html');
+      loadPartial('header-placeholder', '../layouts/header.php');
       loadPartial('footer-placeholder', '../layouts/footer.html', function () {
         var footerYear = document.getElementById('footerYear');
         if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -569,7 +573,7 @@
       });
   }
 
-  loadPartial('header-placeholder', '../layouts/header.html');
+  loadPartial('header-placeholder', '../layouts/header.php');
   loadPartial('footer-placeholder', '../layouts/footer.html', function () {
     var year = document.getElementById('footerYear');
     if (year) year.textContent = new Date().getFullYear();
@@ -976,7 +980,7 @@
 
       loadData();
       render();
-      loadPartial('header-placeholder', '../layouts/header.html');
+      loadPartial('header-placeholder', '../layouts/header.php');
       loadPartial('footer-placeholder', '../layouts/footer.html', function () {
         var footerYear = document.getElementById('footerYear');
         if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -1013,7 +1017,7 @@
         });
     }
 
-    loadPartial('header-placeholder', '../layouts/header.html');
+    loadPartial('header-placeholder', '../layouts/header.php');
     loadPartial('footer-placeholder', '../layouts/footer.html', function () {
       var year = document.getElementById('footerYear');
       if (year) year.textContent = new Date().getFullYear();
@@ -1045,7 +1049,7 @@
         .catch(error => console.error(`Error loading ${file}:`, error));
     }
 
-    loadPartial('header-placeholder', '../layouts/header.html');
+    loadPartial('header-placeholder', '../layouts/header.php');
     loadPartial('footer-placeholder', '../layouts/footer.html', function () {
       const footerYear = document.getElementById('footerYear');
       if (footerYear) {
@@ -1406,7 +1410,7 @@
 					.catch(function (error) { console.error('Error loading ' + file + ':', error); });
 			}
 
-			loadPartial('header-placeholder', '../layouts/header.html');
+			loadPartial('header-placeholder', '../layouts/header.php');
 			loadPartial('footer-placeholder', '../layouts/footer.html', function () {
 				var footerYear = document.getElementById('footerYear');
 				if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -1628,7 +1632,7 @@
 			}
 
 			loadInteractions();
-			loadPartial('header-placeholder', '../layouts/header.html');
+			loadPartial('header-placeholder', '../layouts/header.php');
 			loadPartial('footer-placeholder', '../layouts/footer.html', function () {
 				var footerYear = document.getElementById('footerYear');
 				if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -1992,7 +1996,7 @@
 					.catch(function (error) { console.error('Error loading ' + file + ':', error); });
 			}
 
-			loadPartial('header-placeholder', '../layouts/header.html');
+			loadPartial('header-placeholder', '../layouts/header.php');
 			loadPartial('footer-placeholder', '../layouts/footer.html', function () {
 				var footerYear = document.getElementById('footerYear');
 				if (footerYear) footerYear.textContent = new Date().getFullYear();
@@ -2180,7 +2184,7 @@
       }
 
       loadActivities();
-      loadPartial('header-placeholder', '../layouts/header.html');
+      loadPartial('header-placeholder', '../layouts/header.php');
       loadPartial('footer-placeholder', '../layouts/footer.html', function () {
         var footerYear = document.getElementById('footerYear');
         if (footerYear) footerYear.textContent = new Date().getFullYear();

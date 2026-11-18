@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,12 +17,8 @@
 <body class="bg-white page-index-html">
 
   <?php
-  $headerMarkup = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'header.html');
-  if ($headerMarkup === false) {
-    http_response_code(500);
-    exit('Unable to load the site header.');
-  }
-  echo str_replace(['src="../', 'href="../'], ['src="', 'href="'], $headerMarkup);
+  $headerBasePath = '';
+  require __DIR__ . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'header.php';
   ?>
 
   <!-- Main Content -->
