@@ -10,7 +10,7 @@ function loginEscapeHtml($value): string
 
 $userId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 if ($userId !== false) {
-  header('Location: index.html');
+  header('Location: index.php');
   exit;
 }
 
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = (int) $matches[0]['user_id'];
             $_SESSION['full_name'] = $matches[0]['full_name'];
             $_SESSION['role'] = $matches[0]['role'];
-            header('Location: index.html');
+            header('Location: index.php');
             exit;
           }
 

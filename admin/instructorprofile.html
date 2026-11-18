@@ -13,52 +13,53 @@
   <main class="container py-4 flex-fill">
     <h1 class="h3 font-weight-bold mb-4">Instructor Profile</h1>
 
-    <form class="card shadow-sm mx-auto common-inline-admin-instructorprofile-html-1" action="#" method="post" enctype="multipart/form-data">
+    <form class="card shadow-sm mx-auto common-inline-admin-instructorprofile-html-1" id="instructorProfileForm" action="instructorprofile.php" method="post" enctype="multipart/form-data">
       <div class="card-body p-4">
+        <div class="alert d-none" id="profileStatus" role="status" aria-live="polite"></div>
         <div class="text-center mb-4">
           <img class="rounded-circle border bg-light mb-2 common-inline-admin-instructorprofile-html-2" id="profilePhoto"
                src="../assets/images/person-fill.svg" alt="Instructor profile photo"
                width="120" height="120">
           <label class="d-block font-weight-bold mb-2" for="photoUpload">Profile Photo</label>
-          <input class="form-control-file" id="photoUpload" name="photo" type="file" accept="image/*">
+          <input class="form-control-file" id="photoUpload" name="photo" type="file" accept="image/jpeg,image/png,image/gif,image/webp" disabled>
         </div>
 
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="nic">NIC</label>
-            <input class="form-control" id="nic" name="nic_number" type="text" autocomplete="off">
+            <input class="form-control" id="nic" name="nic_number" type="text" maxlength="20" autocomplete="off" required disabled>
           </div>
           <div class="form-group col-md-6">
             <label for="instructorName">Name</label>
-            <input class="form-control" id="instructorName" name="full_name" type="text" autocomplete="name">
+            <input class="form-control" id="instructorName" name="full_name" type="text" maxlength="150" autocomplete="name" required disabled>
           </div>
           <div class="form-group col-md-6">
             <label for="contactNumber">Contact Number</label>
-            <input class="form-control" id="contactNumber" name="contact_number" type="tel" autocomplete="tel">
+            <input class="form-control" id="contactNumber" name="contact_number" type="tel" maxlength="20" autocomplete="tel" required disabled>
           </div>
           <div class="form-group col-md-6">
             <label for="emailAddress">Email Address</label>
-            <input class="form-control" id="emailAddress" name="email" type="email" autocomplete="email">
+            <input class="form-control" id="emailAddress" name="email" type="email" maxlength="150" autocomplete="email" required disabled>
           </div>
           <div class="form-group col-md-6">
             <label for="employeeCode">Employee Code</label>
-            <input class="form-control" id="employeeCode" name="employee_code" type="text">
+            <input class="form-control" id="employeeCode" name="employee_code" type="text" maxlength="50" required disabled>
           </div>
           <div class="form-group col-md-6 mb-0">
             <label for="department">Department</label>
-            <input class="form-control" id="department" name="department" type="text">
+            <input class="form-control" id="department" name="department" type="text" maxlength="100" required disabled>
           </div>
           <div class="form-group col-md-6 mb-0">
             <label for="role">Account Type</label>
-            <input class="form-control" id="role" name="role" type="text" value="instructor" readonly>
+            <input class="form-control" id="role" name="role" type="text" value="instructor" readonly disabled>
           </div>
         </div>
       </div>
 
       <div class="card-footer bg-white d-flex justify-content-end flex-wrap">
         <button class="btn btn-secondary mr-2 mb-1" id="viewInstructorProfile" type="button">View</button>
-        <button class="btn btn-primary mr-2 mb-1" type="button">Edit</button>
-        <button class="btn btn-success mr-2 mb-1" type="button">Update</button>
+        <button class="btn btn-primary mr-2 mb-1" id="editInstructorProfile" type="button" disabled>Edit</button>
+        <button class="btn btn-success mr-2 mb-1" id="updateInstructorProfile" type="submit" disabled>Update</button>
         <button class="btn btn-danger mb-1" type="button">Delete</button>
       </div>
     </form>

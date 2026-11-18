@@ -13,8 +13,14 @@
 </head>
 <body class="bg-white page-index-html">
 
-  <!-- Header Placeholder -->
-  <div id="header-placeholder"></div>
+  <?php
+  $headerMarkup = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'header.html');
+  if ($headerMarkup === false) {
+    http_response_code(500);
+    exit('Unable to load the site header.');
+  }
+  echo str_replace(['src="../', 'href="../'], ['src="', 'href="'], $headerMarkup);
+  ?>
 
   <!-- Main Content -->
   <main>
@@ -32,11 +38,10 @@
     </div>
   </main>
 
-  <!-- Footer Placeholder -->
-  <div id="footer-placeholder"></div>
+  <?php require __DIR__ . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.html'; ?>
 
   <!-- Pure JavaScript to load header and footer partials -->
-  <script src="assets/js/common.js" data-page="index.html"></script>
+  <script src="assets/js/common.js" data-page="index.php"></script>
 
 </body>
 </html>
