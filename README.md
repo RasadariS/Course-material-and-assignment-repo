@@ -7,6 +7,8 @@ Open `login.php` through XAMPP/Apache. Students sign in with their registration 
 
 The login page links to `admin/signup.php`. Database connection settings default to `localhost`, database `course_repository_db`, MySQL user `root`, and an empty password; set `DB_HOST`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` environment variables to override them.
 
+Password reset uses one-time links. Run `database/create_password_reset_tokens_table.sql` in the project database, set `APP_BASE_URL` to the full base URL of the application, and set `PASSWORD_RESET_FROM_EMAIL` to the sender address. PHP email delivery must also be configured on the server. Students request a link with their registration number; instructors and administrators use their email or NIC.
+
 The signup page creates a user and its matching student or instructor row in one transaction. Only signed-in administrators can select Administrator; that account and its `system_administrators` row are created transactionally. Public administrator registration is blocked.
 
 Existing databases missing the `system_administrators` table can apply `database/create_system_administrators_table.sql` in phpMyAdmin or the MySQL command line. To preserve rows from an older `admins` table, apply `database/migrate_admins_to_system_administrators.sql` after creating the new table.

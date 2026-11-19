@@ -97,8 +97,8 @@ body.page-admin-instructorprofile-html .common-inline-admin-instructorprofile-ht
 body.page-admin-instructorprofileview-html .common-inline-admin-instructorprofileview-html-1 { max-width: 760px; }
 /* Form/page: Instructor profile view (admin/instructorprofileview.html). */
 body.page-admin-instructorprofileview-html .common-inline-admin-instructorprofileview-html-2 { object-fit: cover; }
-/* Form/page: Reset credentials form (admin/resetcredentials.html). */
-body.page-admin-resetcredentials-html {
+/* Form/page: Reset credentials form (admin/resetcredentials.php). */
+body.page-admin-resetcredentials-php {
       min-height: 100vh;
       display: grid;
       place-items: center;
@@ -107,20 +107,34 @@ body.page-admin-resetcredentials-html {
       color: #343238;
       font-family: Arial, sans-serif;
     }
-    body.page-admin-resetcredentials-html .reset-card {
+    body.page-admin-resetcredentials-php .reset-card {
       width: 100%;
       max-width: 460px;
       padding: 2rem;
       background: #ededed;
     }
-    body.page-admin-resetcredentials-html .reset-logo {
+    body.page-admin-resetcredentials-php .reset-logo {
       display: block;
       width: 132px;
       height: 109px;
       margin: 0 auto 1.5rem;
       object-fit: contain;
     }
-    body.page-admin-resetcredentials-html .reset-card .btn { width: 100%; }
+    body.page-admin-resetcredentials-php .reset-card .btn { width: 100%; }
+
+@media (max-width: 480px) {
+  body.page-admin-resetcredentials-php { padding: 0.75rem; }
+  body.page-admin-resetcredentials-php .reset-card { padding: 1.25rem; }
+}
+
+@media (max-height: 600px) {
+  body.page-admin-resetcredentials-php { padding: 0.5rem; }
+  body.page-admin-resetcredentials-php .reset-card { padding: 1.25rem 2rem; }
+  body.page-admin-resetcredentials-php .reset-logo {
+    height: 80px;
+    margin-bottom: 1rem;
+  }
+}
 
 /* Form/page: Administrator signup form (admin/signup.html). */
 body.page-admin-signup-html { min-height: 100vh; display: flex; flex-direction: column; }
