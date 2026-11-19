@@ -41,8 +41,15 @@ $headerEscape = function ($value) {
               User Privileges
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/coursemanagement.php'); ?>">
+              Course Management
+            </a>
+          </li>
         <?php endif; ?>
-        <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.html'); ?>">My Courses</a></li>
+        <?php if ($userId !== false && in_array($userRole, ['student', 'instructor'], true)): ?>
+          <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.html'); ?>">My Courses</a></li>
+        <?php endif; ?>
         <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'student/trackstudentactivity.html'); ?>">My Activity</a></li>
 
         <li class="nav-item mx-2">
