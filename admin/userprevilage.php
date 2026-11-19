@@ -108,13 +108,13 @@ if (!in_array($userRole, ['admin', 'administrator', 'system administrator'], tru
               <td><input class="form-access-checkbox" type="checkbox" data-form="module" data-role="admin" aria-label="Administrator access to Module" checked></td>
             </tr>
             <tr>
-              <th class="form-access-name" scope="row"><a href="../course/courseupload.html#materialForm">Upload course material</a></th>
+              <th class="form-access-name" scope="row"><a href="../course/courseupload.php#materialForm">Upload course material</a></th>
               <td><input class="form-access-checkbox" type="checkbox" data-form="material-upload" data-role="student" aria-label="Student access to Upload course material"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="material-upload" data-role="instructor" aria-label="Instructor access to Upload course material" checked></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="material-upload" data-role="admin" aria-label="Administrator access to Upload course material"></td>
             </tr>
             <tr>
-              <th class="form-access-name" scope="row"><a href="../course/courseupload.html#assignmentForm">Create assignment</a></th>
+              <th class="form-access-name" scope="row"><a href="../course/courseupload.php#assignmentForm">Create assignment</a></th>
               <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-create" data-role="student" aria-label="Student access to Create assignment"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-create" data-role="instructor" aria-label="Instructor access to Create assignment" checked></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="assignment-create" data-role="admin" aria-label="Administrator access to Create assignment"></td>

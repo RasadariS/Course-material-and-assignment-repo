@@ -165,7 +165,7 @@
 
     },
     // Form/page: Course upload form
-    'course/courseupload.html': function () {
+    'course/courseupload.php': function () {
     [
       { input: document.getElementById('materialFile'), status: document.getElementById('materialFileStatus') },
       { input: document.getElementById('assignmentFile'), status: document.getElementById('assignmentFileStatus') }
@@ -178,27 +178,6 @@
       });
     });
 
-    function loadPartial(id, file, done) {
-      fetch(file)
-        .then(function (response) {
-          if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
-          return response.text();
-        })
-        .then(function (html) {
-          document.getElementById(id).innerHTML = html;
-          if (done) done();
-        })
-        .catch(function (error) {
-          console.error('Error loading ' + file + ':', error);
-        });
-    }
-
-    loadPartial('header-placeholder', '../layouts/header.php');
-    loadPartial('footer-placeholder', '../layouts/footer.php', function () {
-      var year = document.getElementById('footerYear');
-      if (year) year.textContent = new Date().getFullYear();
-    });
-  
     },
     // Form/page: My courses page
     'course/mycourses.html': function () {
