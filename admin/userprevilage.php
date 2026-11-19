@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+$userId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+$userRole = strtolower((string) ($_SESSION['role'] ?? ''));
+
+if ($userId === false) {
+  header('Location: ../login.php');
+  exit;
+}
+
+if (!in_array($userRole, ['admin', 'administrator', 'system administrator'], true)) {
+  http_response_code(403);
+  exit('This page is available to administrators only.');
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,8 +24,11 @@
 
   <link href="../assets/css/common.css" rel="stylesheet">
 </head>
-<body class="bg-light d-flex flex-column min-vh-100 page-admin-userprevilage-html">
-  <div id="header-placeholder"></div>
+<body class="bg-light d-flex flex-column min-vh-100 page-admin-userprevilage-php">
+  <?php
+  $headerBasePath = '../';
+  require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'header.php';
+  ?>
 
   <main class="container-fluid px-4 py-4 flex-fill">
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
@@ -131,8 +150,8 @@
 
   </main>
 
-  <div id="footer-placeholder"></div>
+  <?php require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.html'; ?>
 
-  <script src="../assets/js/common.js" data-page="admin/userprevilage.html"></script>
+  <script src="../assets/js/common.js" data-page="admin/userprevilage.php"></script>
 </body>
 </html>

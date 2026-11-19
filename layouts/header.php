@@ -35,6 +35,13 @@ $headerEscape = function ($value) {
       <!-- Right side: Home, My Courses, bell, profile -->
       <ul class="navbar-nav align-items-center ms-auto gap-1">
         <li class="nav-item"><a class="nav-link px-3" aria-current="page" href="<?php echo $headerEscape($headerBasePath . 'index.php'); ?>">Home</a></li>
+        <?php if ($userId !== false && in_array($userRole, ['admin', 'administrator', 'system administrator'], true)): ?>
+          <li class="nav-item">
+            <a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'admin/userprevilage.php'); ?>">
+              User Privileges
+            </a>
+          </li>
+        <?php endif; ?>
         <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.html'); ?>">My Courses</a></li>
         <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'student/trackstudentactivity.html'); ?>">My Activity</a></li>
 

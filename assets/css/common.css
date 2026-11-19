@@ -155,14 +155,14 @@ body.page-admin-signup-html { min-height: 100vh; display: flex; flex-direction: 
 body.page-admin-studentprofileview-html .common-inline-admin-studentprofileview-html-1 { max-width: 760px; }
 /* Form/page: Student profile view (admin/studentprofileview.html). */
 body.page-admin-studentprofileview-html .common-inline-admin-studentprofileview-html-2 { object-fit: cover; }
-/* Form/page: User privileges form (admin/userprevilage.html). */
-body.page-admin-userprevilage-html { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
-    body.page-admin-userprevilage-html main { flex: 1; }
-    body.page-admin-userprevilage-html .page-title { font-size: 1.6rem; font-weight: 700; }
-    body.page-admin-userprevilage-html .form-access-table th, body.page-admin-userprevilage-html .form-access-table td { vertical-align: middle; }
-    body.page-admin-userprevilage-html .form-access-table th:not(:first-child), body.page-admin-userprevilage-html .form-access-table td:not(:first-child) { width: 150px; text-align: center; }
-    body.page-admin-userprevilage-html .form-access-checkbox { width: 1.1rem; height: 1.1rem; cursor: pointer; }
-    body.page-admin-userprevilage-html .form-access-name { min-width: 260px; }
+/* Form/page: User privileges form (admin/userprevilage.php). */
+body.page-admin-userprevilage-php { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
+    body.page-admin-userprevilage-php main { flex: 1; }
+    body.page-admin-userprevilage-php .page-title { font-size: 1.6rem; font-weight: 700; }
+    body.page-admin-userprevilage-php .form-access-table th, body.page-admin-userprevilage-php .form-access-table td { vertical-align: middle; }
+    body.page-admin-userprevilage-php .form-access-table th:not(:first-child), body.page-admin-userprevilage-php .form-access-table td:not(:first-child) { width: 150px; text-align: center; }
+    body.page-admin-userprevilage-php .form-access-checkbox { width: 1.1rem; height: 1.1rem; cursor: pointer; }
+    body.page-admin-userprevilage-php .form-access-name { min-width: 260px; }
 
 /* Form/page: Course details and assignment submission form (course/course.html). */
 body.page-course-course-html { min-width: 1024px; min-height: 100vh; display: flex; flex-direction: column; }

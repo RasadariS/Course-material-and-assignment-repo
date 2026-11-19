@@ -92,7 +92,7 @@
   
     },
     // Form/page: User privilege form
-    'admin/userprevilage.html': function () {
+    'admin/userprevilage.php': function () {
     (function () {
       var storageKey = 'dtetHtmlFormAccessV1';
       var checkboxes = document.querySelectorAll('.form-access-checkbox');
@@ -138,26 +138,8 @@
         checkbox.addEventListener('change', saveAccess);
       });
 
-      function loadPartial(id, file, done) {
-        fetch(file)
-          .then(function (response) {
-            if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
-            return response.text();
-          })
-          .then(function (html) {
-            document.getElementById(id).innerHTML = html;
-            if (done) done();
-          })
-          .catch(function (error) {
-            console.error('Error loading ' + file + ':', error);
-          });
-      }
-
-      loadPartial('header-placeholder', '../layouts/header.php');
-      loadPartial('footer-placeholder', '../layouts/footer.html', function () {
-        var footerYear = document.getElementById('footerYear');
-        if (footerYear) footerYear.textContent = new Date().getFullYear();
-      });
+      var footerYear = document.getElementById('footerYear');
+      if (footerYear) footerYear.textContent = new Date().getFullYear();
     }());
   
     },
