@@ -31,19 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $identifierInput = $_POST['identifier'] ?? '';
     $password = $_POST['password'] ?? '';
     if (!is_string($identifierInput) || !is_string($password)) {
-      $errorMessage = 'Enter a valid email or NIC and password.';
+      $errorMessage = 'Enter a valid user name and password.';
     } else {
       $identifier = trim($identifierInput);
       if ($identifier === '' || strlen($identifier) > 150 || $password === '' || strlen($password) > 4096) {
-        $errorMessage = 'Enter a valid email or NIC and password.';
+        $errorMessage = 'Enter a valid user name and password.';
       } else {
         try {
           $pdo = require __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
-          $identifierColumn = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'nic_number';
           $lookup = $pdo->prepare(
-            'SELECT user_id, full_name, password_hash, role FROM users WHERE ' . $identifierColumn . ' = ? LIMIT 2'
+            'SELECT u.user_id, u.full_name, u.password_hash, u.role
+             FROM users u
+             LEFT JOIN students s ON s.user_id = u.user_id
+             WHERE (LOWER(u.role) = \'student\' AND s.registration_number = ?)
+                OR (LOWER(u.role) <> \'student\' AND (u.email = ? OR u.nic_number = ?))
+             LIMIT 2'
           );
-          $lookup->execute([$identifier]);
+          $lookup->execute([$identifier, $identifier, $identifier]);
           $matches = $lookup->fetchAll();
 
           if (count($matches) === 1 && password_verify($password, $matches[0]['password_hash'])) {
@@ -62,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           if (count($matches) > 1) {
             error_log('Login rejected because the submitted identifier matches multiple user records.');
           }
-          $errorMessage = 'Invalid email or NIC, or password.';
+          $errorMessage = 'Invalid user name or password.';
         } catch (RuntimeException $exception) {
           $errorMessage = $exception->getMessage();
         } catch (PDOException $exception) {
@@ -99,13 +103,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php endif; ?>
       <div class="field-group">
         <div class="field-control">
-          <label for="loginName">Email or NIC</label>
+          <label for="loginName">User Name</label>
           <input id="loginName" name="identifier" type="text" maxlength="150" required
                  value="<?php echo loginEscapeHtml($identifier); ?>"
                  autocomplete="username" aria-describedby="loginNameHelp">
-          <button class="clear-field" type="button" aria-label="Clear email or NIC" data-clear="loginName">&times;</button>
+          <button class="clear-field" type="button" aria-label="Clear user name" data-clear="loginName">&times;</button>
         </div>
-        <p class="field-help" id="loginNameHelp">Enter the email address or NIC registered on your account.</p>
+        <p class="field-help" id="loginNameHelp">
+          Students: enter your registration number. Instructors and administrators: enter your email or NIC.
+        </p>
       </div>
 
       <div class="field-group">
