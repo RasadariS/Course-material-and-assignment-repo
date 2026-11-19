@@ -164,7 +164,7 @@ body.page-admin-userprevilage-php { min-height: 100vh; display: flex; flex-direc
     body.page-admin-userprevilage-php .form-access-checkbox { width: 1.1rem; height: 1.1rem; cursor: pointer; }
     body.page-admin-userprevilage-php .form-access-name { min-width: 260px; }
 
-/* Form/page: Course details and assignment submission form (course/course.html). */
+/* Form/page: Course details and assignment submission form (course/course.php). */
 body.page-course-course-html { min-width: 1024px; min-height: 100vh; display: flex; flex-direction: column; }
     body.page-course-course-html main { flex: 1; }
     body.page-course-course-html .course-title { font-size: 1.5rem; font-weight: 700; }

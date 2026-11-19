@@ -144,7 +144,7 @@
   
     },
     // Form/page: Course details and assignment submission form
-    'course/course.html': function () {
+    'course/course.php': function () {
   document.querySelectorAll('#courseTabs [data-bs-toggle="tab"]').forEach(function (tab) {
     tab.addEventListener('click', function () {
       document.querySelectorAll('#courseTabs [data-bs-toggle="tab"]').forEach(function (item) {
@@ -163,26 +163,6 @@
     });
   });
 
-  function loadPartial(id, file, done) {
-    fetch(file)
-      .then(function (response) {
-        if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
-        return response.text();
-      })
-      .then(function (html) {
-        document.getElementById(id).innerHTML = html;
-        if (done) done();
-      })
-      .catch(function (error) {
-        console.error('Error loading ' + file + ':', error);
-      });
-  }
-
-  loadPartial('header-placeholder', '../layouts/header.php');
-  loadPartial('footer-placeholder', '../layouts/footer.php', function () {
-    var year = document.getElementById('footerYear');
-    if (year) year.textContent = new Date().getFullYear();
-  });
     },
     // Form/page: Course management form
     'course/coursemanagement.html': function () {
