@@ -400,7 +400,7 @@ body.page-instructor-studentinteraction-html { min-height: 100vh; display: flex;
 			body.page-instructor-studentinteraction-html .filter-actions .btn { flex: 1; }
 		}
 
-/* Form/page: Shared footer (layouts/footer.html). */
+/* Form/page: Shared footer (layouts/footer.php). */
 .site-footer { background-color: #dcdbdb; color: #212529; font-size: 0.7rem; }
 
 /* Form/page: Shared header (layouts/header.html). */

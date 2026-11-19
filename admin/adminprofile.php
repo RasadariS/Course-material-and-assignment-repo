@@ -92,7 +92,7 @@ if ($profile && is_string($profile['profile_photo']) &&
     <?php endif; ?>
   </main>
 
-  <?php require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.html'; ?>
+  <?php require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.php'; ?>
   <script src="../assets/js/common.js" data-page="admin/adminprofile.php"></script>
 </body>
 </html>

@@ -150,7 +150,7 @@ if (!in_array($userRole, ['admin', 'administrator', 'system administrator'], tru
 
   </main>
 
-  <?php require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.html'; ?>
+  <?php require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.php'; ?>
 
   <script src="../assets/js/common.js" data-page="admin/userprevilage.php"></script>
 </body>

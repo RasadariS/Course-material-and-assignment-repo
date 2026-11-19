@@ -37,7 +37,7 @@ session_start();
     </div>
   </main>
 
-  <?php require __DIR__ . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.html'; ?>
+  <?php require __DIR__ . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . 'footer.php'; ?>
 
   <!-- Pure JavaScript to load header and footer partials -->
   <script src="assets/js/common.js" data-page="index.php"></script>
