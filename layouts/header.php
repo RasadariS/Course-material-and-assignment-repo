@@ -12,7 +12,7 @@ if ($userId !== false) {
     $_SESSION['logout_csrf'] = bin2hex(random_bytes(32));
   }
   if ($userRole === 'student') {
-    $profilePath = $headerBasePath . 'admin/studentprofile.html';
+    $profilePath = $headerBasePath . 'admin/studentprofile.php';
   } elseif ($userRole === 'instructor') {
     $profilePath = $headerBasePath . 'admin/instructorprofile.php';
   } elseif (in_array($userRole, ['admin', 'administrator', 'system administrator'], true)) {
