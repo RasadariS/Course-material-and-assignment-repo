@@ -90,19 +90,19 @@ if (!in_array($userRole, ['admin', 'administrator', 'system administrator'], tru
               <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-profile" data-role="admin" aria-label="Administrator access to Instructor profile" checked></td>
             </tr>
             <tr>
-              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.html#courseForm">Course</a></th>
+              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.php#courseForm">Course</a></th>
               <td><input class="form-access-checkbox" type="checkbox" data-form="course" data-role="student" aria-label="Student access to Course"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="course" data-role="instructor" aria-label="Instructor access to Course"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="course" data-role="admin" aria-label="Administrator access to Course" checked></td>
             </tr>
             <tr>
-              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.html#semesterForm">Semester</a></th>
+              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.php#semesterForm">Semester</a></th>
               <td><input class="form-access-checkbox" type="checkbox" data-form="semester" data-role="student" aria-label="Student access to Semester"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="semester" data-role="instructor" aria-label="Instructor access to Semester"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="semester" data-role="admin" aria-label="Administrator access to Semester" checked></td>
             </tr>
             <tr>
-              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.html#moduleForm">Module</a></th>
+              <th class="form-access-name" scope="row"><a href="../course/coursemanagement.php#moduleForm">Module</a></th>
               <td><input class="form-access-checkbox" type="checkbox" data-form="module" data-role="student" aria-label="Student access to Module"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="module" data-role="instructor" aria-label="Instructor access to Module"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="module" data-role="admin" aria-label="Administrator access to Module" checked></td>

@@ -220,21 +220,21 @@ body.page-course-course-html { min-width: 1024px; min-height: 100vh; display: fl
     body.page-course-course-html .module-card + .module-card { margin-top: 1rem; }
     body.page-course-course-html .schema-empty-state { color: #6c757d; }
 
-/* Form/page: Course management form (course/coursemanagement.html). */
-body.page-course-coursemanagement-html { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
-    body.page-course-coursemanagement-html main { flex: 1; }
-    body.page-course-coursemanagement-html .page-title { font-size: 1.6rem; font-weight: 700; }
-    body.page-course-coursemanagement-html .management-section { height: 100%; }
-    body.page-course-coursemanagement-html .management-section .card-header { background-color: #f7f4ff; }
-    body.page-course-coursemanagement-html .management-section h2 { font-size: 1.1rem; }
-    body.page-course-coursemanagement-html .table-responsive { min-height: 5rem; }
-    body.page-course-coursemanagement-html .table th, body.page-course-coursemanagement-html .table td { vertical-align: middle; }
-    body.page-course-coursemanagement-html .empty-state { color: #6c757d; text-align: center; }
-    body.page-course-coursemanagement-html .record-actions { white-space: nowrap; }
-    body.page-course-coursemanagement-html .record-actions .btn { margin: 0.1rem; }
-    body.page-course-coursemanagement-html .form-status:empty { display: none; }
-   body.page-course-coursemanagement-html @media (max-width: 767.98px) {
-      body.page-course-coursemanagement-html .management-section { margin-bottom: 1rem; }
+/* Form/page: Course management form (course/coursemanagement.php). */
+body.page-course-coursemanagement-php { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
+    body.page-course-coursemanagement-php main { flex: 1; }
+    body.page-course-coursemanagement-php .page-title { font-size: 1.6rem; font-weight: 700; }
+    body.page-course-coursemanagement-php .management-section { height: 100%; }
+    body.page-course-coursemanagement-php .management-section .card-header { background-color: #f7f4ff; }
+    body.page-course-coursemanagement-php .management-section h2 { font-size: 1.1rem; }
+    body.page-course-coursemanagement-php .table-responsive { min-height: 5rem; }
+    body.page-course-coursemanagement-php .table th, body.page-course-coursemanagement-php .table td { vertical-align: middle; }
+    body.page-course-coursemanagement-php .empty-state { color: #6c757d; text-align: center; }
+    body.page-course-coursemanagement-php .record-actions { white-space: nowrap; }
+    body.page-course-coursemanagement-php .record-actions .btn { margin: 0.1rem; }
+    body.page-course-coursemanagement-php .form-status:empty { display: none; }
+   @media (max-width: 767.98px) {
+      body.page-course-coursemanagement-php .management-section { margin-bottom: 1rem; }
     }
 
 /* Form/page: Course upload form (course/courseupload.html). */
