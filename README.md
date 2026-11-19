@@ -11,4 +11,4 @@ The signup page creates a user and its matching student or instructor row in one
 
 Existing databases missing the `system_administrators` table can apply `database/create_system_administrators_table.sql` in phpMyAdmin or the MySQL command line. To preserve rows from an older `admins` table, apply `database/migrate_admins_to_system_administrators.sql` after creating the new table.
 
-Signed-in instructors can open `admin/instructorprofile.html` to view and edit their own profile. Updates are validated and saved to the `users` and `instructors` tables; profile photos are optional.
+Signed-in instructors can open `admin/instructorprofile.php` to view and edit their own profile. The profile page uses the `users` and `instructors` tables; profile photos are optional.

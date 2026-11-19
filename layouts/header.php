@@ -14,7 +14,7 @@ if ($userId !== false) {
   if ($userRole === 'student') {
     $profilePath = $headerBasePath . 'admin/studentprofile.html';
   } elseif ($userRole === 'instructor') {
-    $profilePath = $headerBasePath . 'admin/instructorprofile.html';
+    $profilePath = $headerBasePath . 'admin/instructorprofile.php';
   } elseif (in_array($userRole, ['admin', 'administrator', 'system administrator'], true)) {
     $profilePath = $headerBasePath . 'admin/adminprofile.php';
   }
