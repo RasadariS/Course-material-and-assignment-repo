@@ -512,26 +512,26 @@ body.page-login-html * { box-sizing: border-box; }
       body.page-login-html .login-form { width: min(274px, calc(100% - 48px)); }
     }
 
-/* Form/page: Student enrollment form (student/studentenrolement.html). */
-body.page-student-studentenrolement-html { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
-		body.page-student-studentenrolement-html main { flex: 1; }
-		body.page-student-studentenrolement-html .page-title { font-size: 1.6rem; font-weight: 700; }
-		body.page-student-studentenrolement-html .workflow { border-left: 4px solid #087f8c; }
-		body.page-student-studentenrolement-html .module-list { border: 1px solid #dee2e6; border-radius: 4px; overflow: hidden; }
-		body.page-student-studentenrolement-html .course-group + .course-group { border-top: 1px solid #dee2e6; }
-		body.page-student-studentenrolement-html .course-heading { padding: 0.8rem 1rem; background: #f1f6f5; font-weight: 700; }
-		body.page-student-studentenrolement-html .semester-group { padding: 0.75rem 1rem 0; }
-		body.page-student-studentenrolement-html .semester-heading { color: #53616a; font-size: 0.9rem; font-weight: 700; }
-		body.page-student-studentenrolement-html .module-row { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.7rem 0; border-top: 1px solid #edf0f2; }
-		body.page-student-studentenrolement-html .module-row input { margin-top: 0.25rem; }
-		body.page-student-studentenrolement-html .module-row label { flex: 1; margin: 0; cursor: pointer; }
-		body.page-student-studentenrolement-html .module-description { display: block; color: #6c757d; font-size: 0.85rem; }
-		body.page-student-studentenrolement-html .module-state { color: #26733d; font-size: 0.8rem; white-space: nowrap; }
-		body.page-student-studentenrolement-html .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
-		body.page-student-studentenrolement-html .toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-	body.page-student-studentenrolement-html @media (max-width: 575.98px) {
-			body.page-student-studentenrolement-html .toolbar .btn { flex: 1 1 100%; }
-			body.page-student-studentenrolement-html .module-state { white-space: normal; text-align: right; }
+/* Form/page: Student enrollment form (student/studentenrolement.php). */
+body.page-student-studentenrolement-php { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
+		body.page-student-studentenrolement-php main { flex: 1; }
+		body.page-student-studentenrolement-php .page-title { font-size: 1.6rem; font-weight: 700; }
+		body.page-student-studentenrolement-php .workflow { border-left: 4px solid #087f8c; }
+		body.page-student-studentenrolement-php .module-list { border: 1px solid #dee2e6; border-radius: 4px; overflow: hidden; }
+		body.page-student-studentenrolement-php .course-group + .course-group { border-top: 1px solid #dee2e6; }
+		body.page-student-studentenrolement-php .course-heading { padding: 0.8rem 1rem; background: #f1f6f5; font-weight: 700; }
+		body.page-student-studentenrolement-php .semester-group { padding: 0.75rem 1rem 0; }
+		body.page-student-studentenrolement-php .semester-heading { color: #53616a; font-size: 0.9rem; font-weight: 700; }
+		body.page-student-studentenrolement-php .module-row { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.7rem 0; border-top: 1px solid #edf0f2; }
+		body.page-student-studentenrolement-php .module-row input { margin-top: 0.25rem; }
+		body.page-student-studentenrolement-php .module-row label { flex: 1; margin: 0; cursor: pointer; }
+		body.page-student-studentenrolement-php .module-description { display: block; color: #6c757d; font-size: 0.85rem; }
+		body.page-student-studentenrolement-php .module-state { color: #26733d; font-size: 0.8rem; white-space: nowrap; }
+		body.page-student-studentenrolement-php .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
+		body.page-student-studentenrolement-php .toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+	@media (max-width: 575.98px) {
+		body.page-student-studentenrolement-php .toolbar .btn { flex: 1 1 100%; }
+		body.page-student-studentenrolement-php .module-state { white-space: normal; text-align: right; }
 		}
 
 /* Form/page: Student activity tracking form (student/trackstudentactivity.html). */

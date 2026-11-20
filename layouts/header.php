@@ -51,6 +51,11 @@ $headerEscape = function ($value) {
               Instructor Module Assignment
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'student/studentenrolement.php'); ?>">
+              Student Module Enrollment
+            </a>
+          </li>
         <?php endif; ?>
         <?php if ($userId !== false && $userRole === 'student'): ?>
           <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.php'); ?>">My Courses</a></li>
