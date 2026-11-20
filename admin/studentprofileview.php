@@ -10,6 +10,7 @@ function studentProfileViewEscape($value): string
 
 $userId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $userRole = strtolower((string) ($_SESSION['role'] ?? ''));
+$isAdministrator = in_array($userRole, ['admin', 'administrator', 'system administrator'], true);
 
 if ($userId === false) {
   header('Location: ../login.php');
@@ -18,10 +19,22 @@ if ($userId === false) {
 
 $profile = null;
 $errorMessage = '';
+$profileUserId = $userId;
+if ($isAdministrator) {
+  $requestedProfileId = filter_var(
+    $_GET['user_id'] ?? null,
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
+  );
+  $profileUserId = $requestedProfileId === false ? null : $requestedProfileId;
+}
 
-if ($userRole !== 'student') {
+if ($userRole !== 'student' && !$isAdministrator) {
   http_response_code(403);
-  $errorMessage = 'This page is available to student accounts only.';
+  $errorMessage = 'This page is available to students and administrators only.';
+} elseif ($isAdministrator && $profileUserId === null) {
+  http_response_code(400);
+  $errorMessage = 'Choose a student to view.';
 } else {
   try {
     $pdo = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
@@ -33,7 +46,7 @@ if ($userRole !== 'student') {
        WHERE u.user_id = ? AND LOWER(u.role) = \'student\'
        LIMIT 1'
     );
-    $lookup->execute([$userId]);
+    $lookup->execute([$profileUserId]);
     $profile = $lookup->fetch();
 
     if (!$profile) {
@@ -45,6 +58,11 @@ if ($userRole !== 'student') {
     http_response_code(500);
     $errorMessage = 'The student profile could not be loaded.';
   }
+}
+
+$backPath = 'studentprofile.php';
+if ($isAdministrator && $profileUserId !== null) {
+  $backPath .= '?user_id=' . $profileUserId;
 }
 
 $photoUrl = '../assets/images/person-fill.svg';
@@ -107,7 +125,7 @@ if ($profile && is_string($profile['profile_photo']) &&
           </dl>
         </div>
         <div class="card-footer bg-white text-right">
-          <a class="btn btn-secondary" href="studentprofile.php">Back to profile</a>
+          <a class="btn btn-secondary" href="<?php echo studentProfileViewEscape($backPath); ?>">Back to profile</a>
         </div>
       </section>
     <?php endif; ?>

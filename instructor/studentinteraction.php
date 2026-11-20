@@ -209,7 +209,6 @@ try {
         <h1 class="page-title mb-1">Student Interactions</h1>
         <p class="text-muted mb-0">Learning material engagement and assignment submission timing.</p>
       </div>
-      <a class="btn btn-outline-primary mt-2 mt-sm-0" href="../course/courseupload.php">Course Content</a>
     </div>
 
     <?php if ($errorMessage !== ''): ?>

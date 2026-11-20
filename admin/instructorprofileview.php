@@ -10,6 +10,7 @@ function instructorViewEscape($value): string
 
 $userId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $userRole = strtolower((string) ($_SESSION['role'] ?? ''));
+$isAdministrator = in_array($userRole, ['admin', 'administrator', 'system administrator'], true);
 
 if ($userId === false) {
   header('Location: ../login.php');
@@ -18,10 +19,22 @@ if ($userId === false) {
 
 $profile = null;
 $errorMessage = '';
+$profileUserId = $userId;
+if ($isAdministrator) {
+  $requestedProfileId = filter_var(
+    $_GET['user_id'] ?? null,
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
+  );
+  $profileUserId = $requestedProfileId === false ? null : $requestedProfileId;
+}
 
-if ($userRole !== 'instructor') {
+if ($userRole !== 'instructor' && !$isAdministrator) {
   http_response_code(403);
-  $errorMessage = 'This page is available to instructor accounts only.';
+  $errorMessage = 'This page is available to instructors and administrators only.';
+} elseif ($isAdministrator && $profileUserId === null) {
+  http_response_code(400);
+  $errorMessage = 'Choose an instructor to view.';
 } else {
   try {
     $pdo = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
@@ -33,7 +46,7 @@ if ($userRole !== 'instructor') {
        WHERE u.user_id = ? AND LOWER(u.role) = \'instructor\'
        LIMIT 1'
     );
-    $lookup->execute([$userId]);
+    $lookup->execute([$profileUserId]);
     $profile = $lookup->fetch();
 
     if (!$profile) {
@@ -45,6 +58,11 @@ if ($userRole !== 'instructor') {
     http_response_code(500);
     $errorMessage = 'The instructor profile could not be loaded.';
   }
+}
+
+$backPath = 'instructorprofile.php';
+if ($isAdministrator && $profileUserId !== null) {
+  $backPath .= '?user_id=' . $profileUserId;
 }
 
 $photoUrl = '../assets/images/person-fill.svg';
@@ -103,7 +121,7 @@ if ($profile && is_string($profile['profile_photo']) &&
           </dl>
         </div>
         <div class="card-footer bg-white text-right">
-          <a class="btn btn-secondary" href="instructorprofile.php">Back to profile</a>
+          <a class="btn btn-secondary" href="<?php echo instructorViewEscape($backPath); ?>">Back to profile</a>
         </div>
       </section>
     <?php endif; ?>

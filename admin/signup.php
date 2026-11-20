@@ -396,8 +396,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      <div class="card-footer bg-white signup-actions d-flex justify-content-between align-items-center flex-wrap">
-        <a href="../login.php">Already have an account? Log in</a>
+      <div class="card-footer bg-white signup-actions d-flex justify-content-end align-items-center flex-wrap">
         <button class="btn btn-primary mt-2 mt-sm-0" type="submit">Create Account</button>
       </div>
     </form>

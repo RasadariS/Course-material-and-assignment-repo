@@ -19,26 +19,52 @@ $courses = [];
 $errorMessage = '';
 $userRole = strtolower((string) ($_SESSION['role'] ?? ''));
 
-if ($userRole !== 'student') {
+if (!in_array($userRole, ['student', 'instructor'], true)) {
   http_response_code(403);
-  $errorMessage = 'This page is available to student accounts only.';
+  $errorMessage = 'This page is available to student and instructor accounts only.';
 } else {
   try {
     $pdo = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
-    $courseLookup = $pdo->prepare(
-      'SELECT c.course_id, c.course_code, c.course_name,
-              s.semester_number, m.module_code, m.module_name
-       FROM students st
-       INNER JOIN student_modules sm ON sm.student_id = st.student_id
-       INNER JOIN modules m ON m.module_id = sm.module_id
-       INNER JOIN semesters s ON s.semester_id = m.semester_id
-       INNER JOIN courses c ON c.course_id = s.course_id
-       WHERE st.user_id = ?
-       ORDER BY c.course_name, s.semester_number, m.module_name'
-    );
-    $courseLookup->execute([$userId]);
+    $courseRows = [];
+    if ($userRole === 'student') {
+      $courseLookup = $pdo->prepare(
+        'SELECT c.course_id, c.course_code, c.course_name,
+                s.semester_number, m.module_code, m.module_name
+         FROM students st
+         INNER JOIN student_modules sm ON sm.student_id = st.student_id
+         INNER JOIN modules m ON m.module_id = sm.module_id
+         INNER JOIN semesters s ON s.semester_id = m.semester_id
+         INNER JOIN courses c ON c.course_id = s.course_id
+         WHERE st.user_id = ?
+         ORDER BY c.course_name, s.semester_number, m.module_name'
+      );
+      $courseLookup->execute([$userId]);
+      $courseRows = $courseLookup->fetchAll();
+    } else {
+      $instructorLookup = $pdo->prepare('SELECT instructor_id FROM instructors WHERE user_id = ? LIMIT 1');
+      $instructorLookup->execute([$userId]);
+      $instructorId = $instructorLookup->fetchColumn();
 
-    foreach ($courseLookup->fetchAll() as $row) {
+      if ($instructorId === false) {
+        http_response_code(404);
+        $errorMessage = 'No instructor profile was found for this account.';
+      } else {
+        $courseLookup = $pdo->prepare(
+          'SELECT c.course_id, c.course_code, c.course_name,
+                  s.semester_number, m.module_code, m.module_name
+           FROM instructor_modules im
+           INNER JOIN modules m ON m.module_id = im.module_id
+           INNER JOIN semesters s ON s.semester_id = m.semester_id
+           INNER JOIN courses c ON c.course_id = s.course_id
+           WHERE im.instructor_id = ?
+           ORDER BY c.course_name, s.semester_number, m.module_name'
+        );
+        $courseLookup->execute([$instructorId]);
+        $courseRows = $courseLookup->fetchAll();
+      }
+    }
+
+    foreach ($courseRows as $row) {
       $courseId = (int) $row['course_id'];
 
       if (!isset($courses[$courseId])) {
@@ -84,7 +110,11 @@ if ($userRole !== 'student') {
     <?php if ($errorMessage !== ''): ?>
       <div class="alert alert-danger" role="alert"><?php echo myCoursesEscape($errorMessage); ?></div>
     <?php elseif (!$courses): ?>
-      <p class="text-muted" role="status">You are not enrolled in any modules yet.</p>
+      <p class="text-muted" role="status">
+        <?php echo $userRole === 'instructor'
+          ? 'No modules are assigned to your instructor account yet.'
+          : 'You are not enrolled in any modules yet.'; ?>
+      </p>
     <?php else: ?>
       <div class="course-row" aria-label="My courses">
         <?php foreach ($courses as $courseId => $course): ?>

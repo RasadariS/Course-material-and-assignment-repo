@@ -10,15 +10,28 @@ function studentProfileEscape($value): string
 
 $userId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $userRole = strtolower((string) ($_SESSION['role'] ?? ''));
+$isAdministrator = in_array($userRole, ['admin', 'administrator', 'system administrator'], true);
+$isStudent = $userRole === 'student';
 
 if ($userId === false) {
   header('Location: ../login.php');
   exit;
 }
 
+$profileUserId = $userId;
+if ($isAdministrator) {
+  $requestedProfileId = filter_var(
+    $_POST['profile_user_id'] ?? ($_GET['user_id'] ?? null),
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 1]]
+  );
+  $profileUserId = $requestedProfileId === false ? null : $requestedProfileId;
+}
+
 $errorMessage = '';
 $successMessage = '';
 $profile = null;
+$students = [];
 
 if (($_GET['updated'] ?? '') === '1') {
   $successMessage = 'Student profile successfully updated.';
@@ -26,9 +39,9 @@ if (($_GET['updated'] ?? '') === '1') {
   $successMessage = 'Profile photo successfully deleted.';
 }
 
-if ($userRole !== 'student') {
+if (!$isStudent && !$isAdministrator) {
   http_response_code(403);
-  $errorMessage = 'This page is available to student accounts only.';
+  $errorMessage = 'This page is available to students and administrators only.';
 } else {
   if (empty($_SESSION['student_profile_csrf'])) {
     $_SESSION['student_profile_csrf'] = bin2hex(random_bytes(32));
@@ -37,81 +50,123 @@ if ($userRole !== 'student') {
   try {
     $pdo = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $submittedToken = $_POST['csrf_token'] ?? '';
-      if (!is_string($submittedToken) || !hash_equals($_SESSION['student_profile_csrf'], $submittedToken)) {
-        $errorMessage = 'Your profile form expired. Reload the page and try again.';
+    if ($isAdministrator) {
+      $studentList = $pdo->query(
+        'SELECT u.user_id, u.full_name, s.registration_number
+         FROM users u
+         INNER JOIN students s ON s.user_id = u.user_id
+         WHERE LOWER(u.role) = \'student\'
+         ORDER BY u.full_name'
+      );
+      $students = $studentList->fetchAll();
+    }
+
+    if ($isAdministrator && $_SERVER['REQUEST_METHOD'] === 'POST' && $profileUserId === null) {
+      http_response_code(400);
+      $errorMessage = 'Choose a student before submitting the form.';
+    } elseif ($isAdministrator && isset($_GET['user_id']) && $profileUserId === null) {
+      http_response_code(400);
+      $errorMessage = 'Choose a valid student.';
+    }
+
+    if ($profileUserId !== null && $errorMessage === '') {
+      $profileLookup = $pdo->prepare(
+        'SELECT u.nic_number, u.full_name, u.email, u.contact_number,
+                s.registration_number, s.intake_year, s.semester_enrolled, s.profile_photo
+         FROM users u
+         INNER JOIN students s ON s.user_id = u.user_id
+         WHERE u.user_id = ? AND LOWER(u.role) = \'student\'
+         LIMIT 1'
+      );
+      $profileLookup->execute([$profileUserId]);
+      $profile = $profileLookup->fetch();
+      if (!$profile) {
+        http_response_code(404);
+        $errorMessage = 'No student profile was found for this account.';
+      }
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $profile) {
+      if (!$isAdministrator) {
+        http_response_code(403);
+        $errorMessage = 'Only administrators can update student profiles.';
       } else {
-        $action = $_POST['action'] ?? 'update';
-
-        if ($action === 'delete_photo') {
-          $photoLookup = $pdo->prepare('SELECT profile_photo FROM students WHERE user_id = ? LIMIT 1');
-          $photoLookup->execute([$userId]);
-          $oldPhoto = $photoLookup->fetchColumn();
-
-          if (is_string($oldPhoto) &&
-              preg_match('#^uploads/students/[a-f0-9]{32}\.(jpg|png|gif|webp)$#D', $oldPhoto)) {
-            $photoFile = dirname(__DIR__) . DIRECTORY_SEPARATOR .
-              str_replace('/', DIRECTORY_SEPARATOR, $oldPhoto);
-            if (is_file($photoFile) && !unlink($photoFile)) {
-              error_log('Unable to delete student profile photo: ' . $oldPhoto);
-            }
-          }
-
-          $clearPhoto = $pdo->prepare('UPDATE students SET profile_photo = NULL WHERE user_id = ?');
-          $clearPhoto->execute([$userId]);
-          header('Location: studentprofile.php?deleted=1');
-          exit;
+        $submittedToken = $_POST['csrf_token'] ?? '';
+        if (!is_string($submittedToken) || !hash_equals($_SESSION['student_profile_csrf'], $submittedToken)) {
+          $errorMessage = 'Your profile form expired. Reload the page and try again.';
         } else {
-          $nicNumber = is_string($_POST['nic_number'] ?? null) ? trim($_POST['nic_number']) : '';
-          $fullName = is_string($_POST['full_name'] ?? null) ? trim($_POST['full_name']) : '';
-          $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
-          $contactNumber = is_string($_POST['contact_number'] ?? null) ? trim($_POST['contact_number']) : '';
-          $registrationNumber = is_string($_POST['registration_number'] ?? null)
-            ? trim($_POST['registration_number']) : '';
-          $intakeYearInput = $_POST['intake_year'] ?? '';
-          $semesterInput = $_POST['semester_enrolled'] ?? '';
+          $action = $_POST['action'] ?? 'update';
 
-          $intakeYear = filter_var($intakeYearInput, FILTER_VALIDATE_INT, [
-            'options' => ['min_range' => 1901, 'max_range' => 2100],
-          ]);
-          $semester = filter_var($semesterInput, FILTER_VALIDATE_INT, [
-            'options' => ['min_range' => 1, 'max_range' => 4],
-          ]);
+          if ($action === 'delete_photo') {
+            $oldPhoto = $profile['profile_photo'];
 
-          if ($nicNumber === '' || strlen($nicNumber) > 20 ||
-              $fullName === '' || strlen($fullName) > 150 ||
-              $email === '' || strlen($email) > 150 ||
-              !filter_var($email, FILTER_VALIDATE_EMAIL) ||
-              strlen($contactNumber) > 20 ||
-              $registrationNumber === '' || strlen($registrationNumber) > 50 ||
-              $intakeYear === false || $semester === false) {
-            $errorMessage = 'Check the required fields, year, semester, and email address.';
+            if (is_string($oldPhoto) &&
+                preg_match('#^uploads/students/[a-f0-9]{32}\.(jpg|png|gif|webp)$#D', $oldPhoto)) {
+              $photoFile = dirname(__DIR__) . DIRECTORY_SEPARATOR .
+                str_replace('/', DIRECTORY_SEPARATOR, $oldPhoto);
+              if (is_file($photoFile) && !unlink($photoFile)) {
+                error_log('Unable to delete student profile photo: ' . $oldPhoto);
+              }
+            }
+
+            $clearPhoto = $pdo->prepare('UPDATE students SET profile_photo = NULL WHERE user_id = ?');
+            $clearPhoto->execute([$profileUserId]);
+            $redirect = 'studentprofile.php?deleted=1';
+            if ($isAdministrator) {
+              $redirect .= '&user_id=' . $profileUserId;
+            }
+            header('Location: ' . $redirect);
+            exit;
           } else {
+            $nicNumber = is_string($_POST['nic_number'] ?? null) ? trim($_POST['nic_number']) : '';
+            $fullName = is_string($_POST['full_name'] ?? null) ? trim($_POST['full_name']) : '';
+            $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
+            $contactNumber = is_string($_POST['contact_number'] ?? null) ? trim($_POST['contact_number']) : '';
+            $registrationNumber = is_string($_POST['registration_number'] ?? null)
+              ? trim($_POST['registration_number']) : '';
+            $intakeYearInput = $_POST['intake_year'] ?? '';
+            $semesterInput = $_POST['semester_enrolled'] ?? '';
+
+            $intakeYear = filter_var($intakeYearInput, FILTER_VALIDATE_INT, [
+              'options' => ['min_range' => 1901, 'max_range' => 2100],
+            ]);
+            $semester = filter_var($semesterInput, FILTER_VALIDATE_INT, [
+              'options' => ['min_range' => 1, 'max_range' => 4],
+            ]);
+
+            if ($nicNumber === '' || strlen($nicNumber) > 20 ||
+                $fullName === '' || strlen($fullName) > 150 ||
+                $email === '' || strlen($email) > 150 ||
+                !filter_var($email, FILTER_VALIDATE_EMAIL) ||
+                strlen($contactNumber) > 20 ||
+                $registrationNumber === '' || strlen($registrationNumber) > 50 ||
+                $intakeYear === false || $semester === false) {
+              $errorMessage = 'Check the required fields, year, semester, and email address.';
+            } else {
             $duplicateUser = $pdo->prepare(
               'SELECT user_id FROM users
                WHERE (nic_number = ? OR email = ?) AND user_id <> ?
                LIMIT 1'
             );
-            $duplicateUser->execute([$nicNumber, $email, $userId]);
+            $duplicateUser->execute([$nicNumber, $email, $profileUserId]);
 
             $duplicateRegistration = $pdo->prepare(
               'SELECT student_id FROM students
                WHERE registration_number = ? AND user_id <> ?
                LIMIT 1'
             );
-            $duplicateRegistration->execute([$registrationNumber, $userId]);
+            $duplicateRegistration->execute([$registrationNumber, $profileUserId]);
 
             if ($duplicateUser->fetch()) {
               $errorMessage = 'Another account already uses that NIC or email address.';
             } elseif ($duplicateRegistration->fetch()) {
               $errorMessage = 'That registration number is already assigned to another student.';
             }
-          }
+            }
 
-          $newPhotoPath = null;
-          if ($errorMessage === '' && isset($_FILES['photo']) &&
-              $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $newPhotoPath = null;
+            if ($errorMessage === '' && isset($_FILES['photo']) &&
+                $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
             if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK ||
                 $_FILES['photo']['size'] > 2 * 1024 * 1024 ||
                 !is_uploaded_file($_FILES['photo']['tmp_name'])) {
@@ -144,12 +199,10 @@ if ($userRole !== 'student') {
                 }
               }
             }
-          }
+            }
 
-          if ($errorMessage === '') {
-            $photoLookup = $pdo->prepare('SELECT profile_photo FROM students WHERE user_id = ? LIMIT 1');
-            $photoLookup->execute([$userId]);
-            $oldPhoto = $photoLookup->fetchColumn();
+            if ($errorMessage === '') {
+            $oldPhoto = $profile['profile_photo'];
 
             try {
               $pdo->beginTransaction();
@@ -164,7 +217,7 @@ if ($userRole !== 'student') {
                 $fullName,
                 $email,
                 $contactNumber === '' ? null : $contactNumber,
-                $userId,
+                $profileUserId,
               ]);
 
               $updateStudent = $pdo->prepare(
@@ -178,7 +231,7 @@ if ($userRole !== 'student') {
                 $intakeYear,
                 $semester,
                 $newPhotoPath,
-                $userId,
+                $profileUserId,
               ]);
               $pdo->commit();
             } catch (Throwable $error) {
@@ -204,29 +257,21 @@ if ($userRole !== 'student') {
               }
             }
 
-            $_SESSION['full_name'] = $fullName;
-            header('Location: studentprofile.php?updated=1');
+            if ($isStudent) {
+              $_SESSION['full_name'] = $fullName;
+            }
+            $redirect = 'studentprofile.php?updated=1';
+            if ($isAdministrator) {
+              $redirect .= '&user_id=' . $profileUserId;
+            }
+            header('Location: ' . $redirect);
             exit;
+            }
           }
         }
       }
     }
 
-    $profileLookup = $pdo->prepare(
-      'SELECT u.nic_number, u.full_name, u.email, u.contact_number,
-              s.registration_number, s.intake_year, s.semester_enrolled, s.profile_photo
-       FROM users u
-       INNER JOIN students s ON s.user_id = u.user_id
-       WHERE u.user_id = ? AND LOWER(u.role) = \'student\'
-       LIMIT 1'
-    );
-    $profileLookup->execute([$userId]);
-    $profile = $profileLookup->fetch();
-
-    if (!$profile) {
-      http_response_code(404);
-      $errorMessage = 'No student profile was found for this account.';
-    }
   } catch (PDOException $error) {
     error_log('Student profile database error: ' . $error->getMessage());
     http_response_code(500);
@@ -239,6 +284,10 @@ $photoUrl = '../assets/images/person-fill.svg';
 if ($profile && is_string($profile['profile_photo']) &&
     preg_match('#^uploads/students/[a-f0-9]{32}\.(jpg|png|gif|webp)$#D', $profile['profile_photo'])) {
   $photoUrl = '../' . $profile['profile_photo'];
+}
+$viewPath = 'studentprofileview.php';
+if ($isAdministrator && $profileUserId !== null) {
+  $viewPath .= '?user_id=' . $profileUserId;
 }
 ?>
 <!doctype html>
@@ -258,7 +307,29 @@ if ($profile && is_string($profile['profile_photo']) &&
   ?>
 
   <main class="container py-4">
-    <h1 class="page-title mb-4">Student Profile</h1>
+    <h1 class="page-title mb-4"><?php echo $isAdministrator ? 'Manage Student Profiles' : 'Student Profile'; ?></h1>
+
+    <?php if ($isAdministrator): ?>
+      <form class="card card-body shadow-sm mb-4" action="studentprofile.php" method="get">
+        <div class="form-row align-items-end">
+          <div class="form-group col-md-8 mb-md-0">
+            <label for="studentUserId">Choose a student</label>
+            <select class="form-control" id="studentUserId" name="user_id" required>
+              <option value="">Select a student</option>
+              <?php foreach ($students as $student): ?>
+                <option value="<?php echo studentProfileEscape($student['user_id']); ?>"
+                  <?php echo $profileUserId === (int) $student['user_id'] ? 'selected' : ''; ?>>
+                  <?php echo studentProfileEscape($student['full_name'] . ' (' . $student['registration_number'] . ')'); ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <div class="form-group col-md-4 mb-0">
+            <button class="btn btn-primary" type="submit">Load Student</button>
+          </div>
+        </div>
+      </form>
+    <?php endif; ?>
 
     <?php if ($errorMessage !== ''): ?>
       <div class="alert alert-danger" role="alert"><?php echo studentProfileEscape($errorMessage); ?></div>
@@ -267,6 +338,9 @@ if ($profile && is_string($profile['profile_photo']) &&
       <form class="profile-card card border-0 shadow-sm p-4" action="studentprofile.php"
             method="post" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="<?php echo studentProfileEscape($_SESSION['student_profile_csrf']); ?>">
+        <?php if ($isAdministrator): ?>
+          <input type="hidden" name="profile_user_id" value="<?php echo studentProfileEscape($profileUserId); ?>">
+        <?php endif; ?>
 
         <div class="photo-section mb-4">
           <img class="profile-photo" id="profilePhoto"
@@ -321,13 +395,15 @@ if ($profile && is_string($profile['profile_photo']) &&
         </div>
 
         <div class="profile-actions">
-          <a class="profile-button profile-button-view" href="studentprofileview.php">View</a>
-          <button class="profile-button profile-button-edit" id="editProfile" type="button"
-                  onclick="editStudentProfile()">Edit</button>
-          <button class="profile-button profile-button-update" id="updateProfile" type="submit" disabled
-                  onclick="return confirm('Do you want to update the database?');">Update</button>
-          <button class="profile-button profile-button-delete" type="submit" name="action" value="delete_photo"
-                  onclick="return confirm('Do you want to delete your profile photo from the database?');">Delete Photo</button>
+          <a class="profile-button profile-button-view" href="<?php echo studentProfileEscape($viewPath); ?>">View</a>
+          <?php if ($isAdministrator): ?>
+            <button class="profile-button profile-button-edit" id="editProfile" type="button"
+                    onclick="editStudentProfile()">Edit</button>
+            <button class="profile-button profile-button-update" id="updateProfile" type="submit" disabled
+                    onclick="return confirm('Do you want to update the database?');">Update</button>
+            <button class="profile-button profile-button-delete" type="submit" name="action" value="delete_photo"
+                    onclick="return confirm('Do you want to delete your profile photo from the database?');">Delete Photo</button>
+          <?php endif; ?>
         </div>
       </form>
     <?php endif; ?>

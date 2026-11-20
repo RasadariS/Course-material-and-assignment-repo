@@ -47,6 +47,16 @@ $headerEscape = function ($value) {
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'admin/studentprofile.php'); ?>">
+              Student Profiles
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'admin/instructorprofile.php'); ?>">
+              Instructor Profiles
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/coursemanagement.php'); ?>">
               Course Management
             </a>
@@ -66,6 +76,7 @@ $headerEscape = function ($value) {
           <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.php'); ?>">My Courses</a></li>
         <?php endif; ?>
         <?php if ($userId !== false && $userRole === 'instructor'): ?>
+          <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.php'); ?>">My Courses</a></li>
           <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/courseupload.php'); ?>">Course Upload</a></li>
           <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'instructor/studentinteraction.php'); ?>">Student Interactions</a></li>
         <?php endif; ?>
