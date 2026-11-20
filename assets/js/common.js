@@ -185,359 +185,58 @@
     if (footerYear) footerYear.textContent = new Date().getFullYear();
   
     },
-    // Form/page: Instructor enrollment form
-    'instructor/instructorenrolement.html': function () {
-		(function () {
-			var courseStorageKey = 'dtetCourseManagementSchemaV1';
-			var courses = [];
-			var semesters = [];
-			var modules = [];
-			var instructors = [];
-			var assignedModuleIds = {};
-			var pendingModuleIds = {};
-			var instructorSelect = document.getElementById('instructorSelect');
-			var courseFilter = document.getElementById('courseFilter');
-			var semesterFilter = document.getElementById('semesterFilter');
-			var moduleList = document.getElementById('moduleList');
-			var pageStatus = document.getElementById('pageStatus');
+    // Form/page: Instructor module assignment
+    'instructor/instructorenrolement.php': function () {
+      var moduleList = document.getElementById('moduleList');
+      if (!moduleList) return;
 
-			function showStatus(message, type) {
-				pageStatus.textContent = message;
-				pageStatus.className = 'alert alert-' + type;
-			}
+      var courseFilter = document.getElementById('courseFilter');
+      var semesterFilter = document.getElementById('semesterFilter');
+      var selectionCount = document.getElementById('selectionCount');
 
-			function clearStatus() {
-				pageStatus.textContent = '';
-				pageStatus.className = 'alert d-none';
-			}
+      function updateSelectionCount() {
+        var selectedCount = moduleList.querySelectorAll('input[type="checkbox"]:checked:not(:disabled)').length;
+        selectionCount.textContent = selectedCount + (selectedCount === 1 ? ' module selected' : ' modules selected');
+      }
 
-			function addOption(select, value, label) {
-				var option = document.createElement('option');
-				option.value = value;
-				option.textContent = label;
-				select.appendChild(option);
-			}
+      function filterModules() {
+        var selectedCourse = courseFilter ? courseFilter.value : '';
+        var selectedSemester = semesterFilter ? semesterFilter.value : '';
 
-			function loadCourseCatalog() {
-				var stored = localStorage.getItem(courseStorageKey);
-				if (!stored) throw new Error('No course catalog found. Add courses, semesters, and modules in Course Management first.');
-				var data = JSON.parse(stored);
-				if (!data || !Array.isArray(data.courses) || !Array.isArray(data.semesters) || !Array.isArray(data.modules)) {
-					throw new Error('The saved course catalog is not in the expected format.');
-				}
-				courses = data.courses;
-				semesters = data.semesters;
-				modules = data.modules;
-			}
+        moduleList.querySelectorAll('.course-group').forEach(function (courseGroup) {
+          var courseMatches = !selectedCourse || courseGroup.getAttribute('data-course-id') === selectedCourse;
+          var visibleSemesters = 0;
 
-			function fillCourseFilter() {
-				courseFilter.textContent = '';
-				addOption(courseFilter, '', 'All courses');
-				courses.slice().sort(function (left, right) {
-					return String(left.course_name).localeCompare(String(right.course_name));
-				}).forEach(function (course) {
-					addOption(courseFilter, String(course.course_id), course.course_code + ' - ' + course.course_name);
-				});
-				courseFilter.disabled = courses.length === 0;
-			}
+          courseGroup.querySelectorAll('.semester-group').forEach(function (semesterGroup) {
+            var semesterMatches = !selectedSemester ||
+              semesterGroup.getAttribute('data-semester-id') === selectedSemester;
+            semesterGroup.hidden = !courseMatches || !semesterMatches;
+            if (!semesterGroup.hidden) visibleSemesters += 1;
+          });
 
-			function fillSemesterFilter() {
-				var selectedCourse = courseFilter.value;
-				var previousSemester = semesterFilter.value;
-				var available = semesters.filter(function (semester) {
-					return !selectedCourse || String(semester.course_id) === selectedCourse;
-				});
-				semesterFilter.textContent = '';
-				addOption(semesterFilter, '', 'All semesters');
-				available.slice().sort(function (left, right) {
-					return Number(left.semester_number) - Number(right.semester_number);
-				}).forEach(function (semester) {
-					var course = courses.find(function (item) { return String(item.course_id) === String(semester.course_id); });
-					var label = 'Semester ' + semester.semester_number + (semester.academic_year ? ' (' + semester.academic_year + ')' : '');
-					if (!selectedCourse && course) label = course.course_code + ' - ' + label;
-					addOption(semesterFilter, String(semester.semester_id), label);
-				});
-				semesterFilter.disabled = available.length === 0;
-				if (available.some(function (item) { return String(item.semester_id) === previousSemester; })) {
-					semesterFilter.value = previousSemester;
-				}
-			}
+          courseGroup.hidden = visibleSemesters === 0;
+        });
+      }
 
-			function updateSelectionCount() {
-				var count = Object.keys(pendingModuleIds).length;
-				document.getElementById('selectionCount').textContent = count + (count === 1 ? ' module selected' : ' modules selected');
-				document.getElementById('assignButton').disabled = !instructorSelect.value || count === 0;
-				document.getElementById('clearSelection').disabled = count === 0;
-			}
+      if (courseFilter) courseFilter.addEventListener('change', filterModules);
+      if (semesterFilter) semesterFilter.addEventListener('change', filterModules);
+      moduleList.addEventListener('change', updateSelectionCount);
 
-			function createEmptyState(message) {
-				var state = document.createElement('div');
-				state.className = 'empty-state';
-				state.textContent = message;
-				moduleList.appendChild(state);
-			}
+      document.getElementById('selectVisible').addEventListener('click', function () {
+        moduleList.querySelectorAll('.semester-group:not([hidden]) input[type="checkbox"]:not(:disabled)').forEach(function (checkbox) {
+          checkbox.checked = true;
+        });
+        updateSelectionCount();
+      });
 
-			function renderModules() {
-				moduleList.textContent = '';
-				var selectedCourse = courseFilter.value;
-				var selectedSemester = semesterFilter.value;
-				var visibleModules = modules.filter(function (module) {
-					var semester = semesters.find(function (item) { return String(item.semester_id) === String(module.semester_id); });
-					if (!semester) return false;
-					return (!selectedCourse || String(semester.course_id) === selectedCourse) &&
-						(!selectedSemester || String(semester.semester_id) === selectedSemester);
-				});
+      document.getElementById('clearSelection').addEventListener('click', function () {
+        moduleList.querySelectorAll('input[type="checkbox"]:not(:disabled)').forEach(function (checkbox) {
+          checkbox.checked = false;
+        });
+        updateSelectionCount();
+      });
 
-				if (!instructorSelect.value) {
-					createEmptyState('Select an instructor to view current assignments.');
-					updateSelectionCount();
-					return;
-				}
-				if (!visibleModules.length) {
-					createEmptyState('No modules match the selected course and semester.');
-					updateSelectionCount();
-					return;
-				}
-
-				var grouped = {};
-				visibleModules.forEach(function (module) {
-					var semester = semesters.find(function (item) { return String(item.semester_id) === String(module.semester_id); });
-					var course = courses.find(function (item) { return String(item.course_id) === String(semester.course_id); });
-					if (!course) return;
-					var key = String(course.course_id) + ':' + String(semester.semester_id);
-					if (!grouped[key]) grouped[key] = { course: course, semester: semester, modules: [] };
-					grouped[key].modules.push(module);
-				});
-
-				Object.keys(grouped).sort(function (left, right) {
-					var leftGroup = grouped[left];
-					var rightGroup = grouped[right];
-					var courseOrder = String(leftGroup.course.course_name).localeCompare(String(rightGroup.course.course_name));
-					return courseOrder || Number(leftGroup.semester.semester_number) - Number(rightGroup.semester.semester_number);
-				}).forEach(function (key) {
-					var group = grouped[key];
-					var courseSection = document.createElement('section');
-					courseSection.className = 'course-group';
-					var courseHeading = document.createElement('h3');
-					courseHeading.className = 'course-heading mb-0';
-					courseHeading.textContent = group.course.course_code + ' - ' + group.course.course_name;
-					courseSection.appendChild(courseHeading);
-
-					var semesterGroup = document.createElement('div');
-					semesterGroup.className = 'semester-group';
-					var semesterHeading = document.createElement('h4');
-					semesterHeading.className = 'semester-heading mb-2';
-					semesterHeading.textContent = 'Semester ' + group.semester.semester_number +
-						(group.semester.academic_year ? ' · ' + group.semester.academic_year : '');
-					semesterGroup.appendChild(semesterHeading);
-
-					group.modules.sort(function (left, right) {
-						return String(left.module_name).localeCompare(String(right.module_name));
-					}).forEach(function (module) {
-						var moduleRow = document.createElement('div');
-						moduleRow.className = 'module-row';
-						var checkbox = document.createElement('input');
-						checkbox.type = 'checkbox';
-						checkbox.id = 'module-' + module.module_id;
-						checkbox.value = String(module.module_id);
-						var isAssigned = Boolean(assignedModuleIds[String(module.module_id)]);
-						checkbox.checked = isAssigned || Boolean(pendingModuleIds[String(module.module_id)]);
-						checkbox.disabled = isAssigned;
-						checkbox.addEventListener('change', function () {
-							if (checkbox.checked) pendingModuleIds[checkbox.value] = true;
-							else delete pendingModuleIds[checkbox.value];
-							updateSelectionCount();
-						});
-
-						var label = document.createElement('label');
-						label.setAttribute('for', checkbox.id);
-						label.appendChild(document.createTextNode((module.module_code ? module.module_code + ' - ' : '') + module.module_name));
-						if (module.description) {
-							var description = document.createElement('span');
-							description.className = 'module-description';
-							description.textContent = module.description;
-							label.appendChild(description);
-						}
-						moduleRow.appendChild(checkbox);
-						moduleRow.appendChild(label);
-						if (isAssigned) {
-							var assignedState = document.createElement('span');
-							assignedState.className = 'module-state';
-							assignedState.textContent = 'Assigned' + (assignedModuleIds[String(module.module_id)].assigned_date
-								? ' · ' + assignedModuleIds[String(module.module_id)].assigned_date
-								: '');
-							moduleRow.appendChild(assignedState);
-						}
-						semesterGroup.appendChild(moduleRow);
-					});
-					courseSection.appendChild(semesterGroup);
-					moduleList.appendChild(courseSection);
-				});
-				updateSelectionCount();
-			}
-
-			function loadInstructors() {
-				fetch('../api/admin/instructors.php', {
-					credentials: 'same-origin',
-					headers: { Accept: 'application/json' }
-				})
-					.then(function (response) {
-						if (!response.ok) throw new Error('Instructor service returned HTTP ' + response.status + '.');
-						return response.json();
-					})
-					.then(function (payload) {
-						if (!payload || !Array.isArray(payload.instructors)) throw new Error('The instructor service returned an invalid response.');
-						instructors = payload.instructors;
-						instructorSelect.textContent = '';
-						addOption(instructorSelect, '', 'Select an instructor profile');
-						instructors.forEach(function (instructor) {
-							if (instructor.instructor_id === undefined || !instructor.full_name) return;
-							var label = instructor.employee_code
-								? instructor.employee_code + ' - ' + instructor.full_name
-								: instructor.full_name;
-							addOption(instructorSelect, String(instructor.instructor_id), label);
-						});
-						instructorSelect.disabled = instructors.length === 0;
-						if (!instructors.length) {
-							showStatus('No instructor profiles were returned. Create instructor profiles before assigning modules.', 'warning');
-						} else {
-							clearStatus();
-						}
-					})
-					.catch(function (error) {
-						instructorSelect.textContent = '';
-						addOption(instructorSelect, '', 'Instructor profiles unavailable');
-						instructorSelect.disabled = true;
-						showStatus('Could not load instructor profiles. Configure the authenticated admin instructor service first.', 'danger');
-						console.error('Could not load instructor profiles:', error);
-					});
-			}
-
-			function loadAssignments() {
-				var instructorId = instructorSelect.value;
-				assignedModuleIds = {};
-				pendingModuleIds = {};
-				document.getElementById('instructorDetails').textContent = '';
-				if (!instructorId) {
-					document.getElementById('moduleSummary').textContent = 'Choose an instructor to view current module assignments.';
-					renderModules();
-					return;
-				}
-				var instructor = instructors.find(function (item) { return String(item.instructor_id) === instructorId; });
-				document.getElementById('instructorDetails').textContent = instructor
-					? 'Employee code: ' + (instructor.employee_code || 'Not provided') +
-						(instructor.department ? ' · ' + instructor.department : '')
-					: '';
-				document.getElementById('moduleSummary').textContent = 'Loading current module assignments…';
-				renderModules();
-				fetch('../api/admin/instructor-module-assignments.php?instructor_id=' + encodeURIComponent(instructorId), {
-					credentials: 'same-origin',
-					headers: { Accept: 'application/json' }
-				})
-					.then(function (response) {
-						if (!response.ok) throw new Error('Assignment service returned HTTP ' + response.status + '.');
-						return response.json();
-					})
-					.then(function (payload) {
-						if (!payload || !Array.isArray(payload.assignments)) throw new Error('The assignment service returned an invalid response.');
-						payload.assignments.forEach(function (assignment) {
-							if (assignment.module_id !== undefined) {
-								assignedModuleIds[String(assignment.module_id)] = assignment;
-							}
-						});
-						document.getElementById('moduleSummary').textContent =
-							Object.keys(assignedModuleIds).length + ' modules currently assigned';
-						renderModules();
-					})
-					.catch(function (error) {
-						showStatus('Could not load current module assignments for this instructor.', 'danger');
-						document.getElementById('moduleSummary').textContent = 'Current assignment status is unavailable.';
-						console.error('Could not load instructor module assignments:', error);
-					});
-			}
-
-			function saveAssignments() {
-				var instructorId = instructorSelect.value;
-				var moduleIds = Object.keys(pendingModuleIds);
-				if (!instructorId || !moduleIds.length) return;
-				var button = document.getElementById('assignButton');
-				button.disabled = true;
-				button.textContent = 'Assigning…';
-				fetch('../api/admin/instructor-module-assignments.php', {
-					method: 'POST',
-					credentials: 'same-origin',
-					headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-					body: JSON.stringify({ instructor_id: instructorId, module_ids: moduleIds })
-				})
-					.then(function (response) {
-						if (!response.ok) throw new Error('Assignment service returned HTTP ' + response.status + '.');
-						return response.json();
-					})
-					.then(function (payload) {
-						if (!payload || !Array.isArray(payload.assignments)) throw new Error('The assignment service returned an invalid response.');
-						clearStatus();
-						showStatus('Instructor assigned to ' + payload.assignments.length + ' module(s).', 'success');
-						loadAssignments();
-					})
-					.catch(function (error) {
-						showStatus('Could not save these assignments. Check the admin assignment service and try again.', 'danger');
-						console.error('Could not save instructor module assignments:', error);
-					})
-					.finally(function () {
-						button.textContent = 'Assign selected modules';
-						updateSelectionCount();
-					});
-			}
-
-			document.getElementById('selectVisible').addEventListener('click', function () {
-				moduleList.querySelectorAll('input[type="checkbox"]:not(:disabled)').forEach(function (checkbox) {
-					checkbox.checked = true;
-					pendingModuleIds[checkbox.value] = true;
-				});
-				updateSelectionCount();
-			});
-			document.getElementById('clearSelection').addEventListener('click', function () {
-				pendingModuleIds = {};
-				renderModules();
-			});
-			instructorSelect.addEventListener('change', loadAssignments);
-			courseFilter.addEventListener('change', function () {
-				fillSemesterFilter();
-				renderModules();
-			});
-			semesterFilter.addEventListener('change', renderModules);
-			document.getElementById('assignButton').addEventListener('click', saveAssignments);
-
-			try {
-				loadCourseCatalog();
-				fillCourseFilter();
-				fillSemesterFilter();
-			} catch (error) {
-				showStatus(error.message, 'warning');
-				console.error('Could not load course catalog:', error);
-			}
-			loadInstructors();
-
-			function loadPartial(id, file, done) {
-				fetch(file)
-					.then(function (response) {
-						if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
-						return response.text();
-					})
-					.then(function (html) {
-						document.getElementById(id).innerHTML = html;
-						if (done) done();
-					})
-					.catch(function (error) { console.error('Error loading ' + file + ':', error); });
-			}
-
-			loadPartial('header-placeholder', '../layouts/header.php');
-			loadPartial('footer-placeholder', '../layouts/footer.php', function () {
-				var footerYear = document.getElementById('footerYear');
-				if (footerYear) footerYear.textContent = new Date().getFullYear();
-			});
-		}());
-	
+      updateSelectionCount();
     },
     // Form/page: Student interaction report
     'instructor/studentinteraction.html': function () {

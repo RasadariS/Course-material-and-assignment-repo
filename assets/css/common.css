@@ -352,26 +352,26 @@ body.page-index-html {
       z-index: 0;
     }
 
-/* Form/page: Instructor enrollment form (instructor/instructorenrolement.html). */
-body.page-instructor-instructorenrolement-html { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
-		body.page-instructor-instructorenrolement-html main { flex: 1; }
-		body.page-instructor-instructorenrolement-html .page-title { font-size: 1.6rem; font-weight: 700; }
-		body.page-instructor-instructorenrolement-html .workflow { border-left: 4px solid #d17b27; }
-		body.page-instructor-instructorenrolement-html .module-list { border: 1px solid #dee2e6; border-radius: 4px; overflow: hidden; }
-		body.page-instructor-instructorenrolement-html .course-group + .course-group { border-top: 1px solid #dee2e6; }
-		body.page-instructor-instructorenrolement-html .course-heading { padding: 0.8rem 1rem; background: #fbf5ed; font-weight: 700; }
-		body.page-instructor-instructorenrolement-html .semester-group { padding: 0.75rem 1rem 0; }
-		body.page-instructor-instructorenrolement-html .semester-heading { color: #53616a; font-size: 0.9rem; font-weight: 700; }
-		body.page-instructor-instructorenrolement-html .module-row { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.7rem 0; border-top: 1px solid #edf0f2; }
-		body.page-instructor-instructorenrolement-html .module-row input { margin-top: 0.25rem; }
-		body.page-instructor-instructorenrolement-html .module-row label { flex: 1; margin: 0; cursor: pointer; }
-		body.page-instructor-instructorenrolement-html .module-description { display: block; color: #6c757d; font-size: 0.85rem; }
-		body.page-instructor-instructorenrolement-html .module-state { color: #26733d; font-size: 0.8rem; white-space: nowrap; }
-		body.page-instructor-instructorenrolement-html .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
-		body.page-instructor-instructorenrolement-html .toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-	body.page-instructor-instructorenrolement-html @media (max-width: 575.98px) {
-			body.page-instructor-instructorenrolement-html .toolbar .btn { flex: 1 1 100%; }
-			body.page-instructor-instructorenrolement-html .module-state { white-space: normal; text-align: right; }
+/* Form/page: Instructor enrollment form (instructor/instructorenrolement.php). */
+body.page-instructor-instructorenrolement-php { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
+			body.page-instructor-instructorenrolement-php main { flex: 1; }
+			body.page-instructor-instructorenrolement-php .page-title { font-size: 1.6rem; font-weight: 700; }
+			body.page-instructor-instructorenrolement-php .workflow { border-left: 4px solid #d17b27; }
+			body.page-instructor-instructorenrolement-php .module-list { border: 1px solid #dee2e6; border-radius: 4px; overflow: hidden; }
+			body.page-instructor-instructorenrolement-php .course-group + .course-group { border-top: 1px solid #dee2e6; }
+			body.page-instructor-instructorenrolement-php .course-heading { padding: 0.8rem 1rem; background: #fbf5ed; font-weight: 700; }
+			body.page-instructor-instructorenrolement-php .semester-group { padding: 0.75rem 1rem 0; }
+			body.page-instructor-instructorenrolement-php .semester-heading { color: #53616a; font-size: 0.9rem; font-weight: 700; }
+			body.page-instructor-instructorenrolement-php .module-row { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.7rem 0; border-top: 1px solid #edf0f2; }
+			body.page-instructor-instructorenrolement-php .module-row input { margin-top: 0.25rem; }
+			body.page-instructor-instructorenrolement-php .module-row label { flex: 1; margin: 0; cursor: pointer; }
+			body.page-instructor-instructorenrolement-php .module-description { display: block; color: #6c757d; font-size: 0.85rem; }
+			body.page-instructor-instructorenrolement-php .module-state { color: #26733d; font-size: 0.8rem; white-space: nowrap; }
+			body.page-instructor-instructorenrolement-php .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
+			body.page-instructor-instructorenrolement-php .toolbar { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+		@media (max-width: 575.98px) {
+			body.page-instructor-instructorenrolement-php .toolbar .btn { flex: 1 1 100%; }
+			body.page-instructor-instructorenrolement-php .module-state { white-space: normal; text-align: right; }
 		}
 
 /* Form/page: Student interaction report (instructor/studentinteraction.html). */

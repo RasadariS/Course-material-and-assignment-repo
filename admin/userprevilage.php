@@ -132,7 +132,7 @@ if (!in_array($userRole, ['admin', 'administrator', 'system administrator'], tru
               <td><input class="form-access-checkbox" type="checkbox" data-form="student-module-enrollment" data-role="admin" aria-label="Administrator access to Student module enrollment" checked></td>
             </tr>
             <tr>
-              <th class="form-access-name" scope="row"><a href="../instructor/instructorenrolement.html">Instructor module assignment</a></th>
+              <th class="form-access-name" scope="row"><a href="../instructor/instructorenrolement.php">Instructor module assignment</a></th>
               <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-module-assignment" data-role="student" aria-label="Student access to Instructor module assignment"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-module-assignment" data-role="instructor" aria-label="Instructor access to Instructor module assignment"></td>
               <td><input class="form-access-checkbox" type="checkbox" data-form="instructor-module-assignment" data-role="admin" aria-label="Administrator access to Instructor module assignment" checked></td>
