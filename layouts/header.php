@@ -64,7 +64,9 @@ $headerEscape = function ($value) {
           <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/courseupload.php'); ?>">Course Upload</a></li>
           <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'instructor/studentinteraction.php'); ?>">Student Interactions</a></li>
         <?php endif; ?>
-        <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'student/trackstudentactivity.html'); ?>">My Activity</a></li>
+        <?php if ($userId !== false && $userRole === 'student'): ?>
+          <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'student/trackstudentactivity.php'); ?>">My Activity</a></li>
+        <?php endif; ?>
 
         <li class="nav-item mx-2">
           <img src="<?php echo $headerEscape($headerBasePath . 'assets/images/bell-fill.svg'); ?>" alt="Notifications" id="bellBtn"

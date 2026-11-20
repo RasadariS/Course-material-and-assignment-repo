@@ -147,7 +147,7 @@ body.page-admin-signup-html { min-height: 100vh; display: flex; flex-direction: 
     }
     body.page-admin-signup-html .form-section-title { font-size: 1rem; font-weight: 600; }
     body.page-admin-signup-html .signup-actions { border-top: 1px solid #dee2e6; }
-   body.page-admin-signup-html @media (max-width: 575.98px) {
+   @media (max-width: 575.98px) {
       body.page-admin-signup-html .signup-card .card-body { padding: 1.25rem; }
     }
 
@@ -507,7 +507,7 @@ body.page-login-html * { box-sizing: border-box; }
       text-align: center;
       text-decoration: underline;
     }
-   body.page-login-html @media (max-width: 430px) {
+   @media (max-width: 430px) {
       body.page-login-html .login-card { width: calc(100vw - 32px); }
       body.page-login-html .login-form { width: min(274px, calc(100% - 48px)); }
     }
@@ -534,18 +534,18 @@ body.page-student-studentenrolement-php { min-height: 100vh; display: flex; flex
 		body.page-student-studentenrolement-php .module-state { white-space: normal; text-align: right; }
 		}
 
-/* Form/page: Student activity tracking form (student/trackstudentactivity.html). */
-body.page-student-trackstudentactivity-html { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
-    body.page-student-trackstudentactivity-html main { flex: 1; }
-    body.page-student-trackstudentactivity-html .page-title { font-size: 1.6rem; font-weight: 700; }
-    body.page-student-trackstudentactivity-html .activity-card { height: 100%; }
-    body.page-student-trackstudentactivity-html .activity-count { font-size: 1.5rem; font-weight: 700; }
+/* Form/page: Student activity tracking form (student/trackstudentactivity.php). */
+body.page-student-trackstudentactivity-php { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
+    body.page-student-trackstudentactivity-php main { flex: 1; }
+    body.page-student-trackstudentactivity-php .page-title { font-size: 1.6rem; font-weight: 700; }
+    body.page-student-trackstudentactivity-php .activity-card { height: 100%; }
+    body.page-student-trackstudentactivity-php .activity-count { font-size: 1.5rem; font-weight: 700; }
     .activity-table th,
-    body.page-student-trackstudentactivity-html .activity-table td { vertical-align: middle; }
-    body.page-student-trackstudentactivity-html .activity-table td { overflow-wrap: anywhere; }
-    body.page-student-trackstudentactivity-html .filter-actions { display: flex; align-items: end; gap: 0.5rem; }
-    body.page-student-trackstudentactivity-html .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
-   body.page-student-trackstudentactivity-html @media (max-width: 575.98px) {
-      body.page-student-trackstudentactivity-html .filter-actions { align-items: stretch; margin-top: 0.5rem; }
-      body.page-student-trackstudentactivity-html .filter-actions .btn { flex: 1; }
+    body.page-student-trackstudentactivity-php .activity-table td { vertical-align: middle; }
+    body.page-student-trackstudentactivity-php .activity-table td { overflow-wrap: anywhere; }
+    body.page-student-trackstudentactivity-php .filter-actions { display: flex; align-items: end; gap: 0.5rem; }
+    body.page-student-trackstudentactivity-php .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
+   @media (max-width: 575.98px) {
+      body.page-student-trackstudentactivity-php .filter-actions { align-items: stretch; margin-top: 0.5rem; }
+      body.page-student-trackstudentactivity-php .filter-actions .btn { flex: 1; }
     }
