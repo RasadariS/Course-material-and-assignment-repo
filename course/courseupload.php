@@ -119,6 +119,24 @@ function courseUploadRemoveStoredFile(?string $relativePath, string $folder): bo
   return true;
 }
 
+function courseUploadStoredFileExists(?string $relativePath, string $folder): bool
+{
+  if ($relativePath === null) {
+    return false;
+  }
+
+  $pattern = '#^uploads/' . preg_quote($folder, '#') .
+    '/[a-f0-9]{32}\.(pdf|doc|docx|ppt|pptx|xls|xlsx|txt|zip)$#D';
+
+  if (preg_match($pattern, $relativePath) !== 1) {
+    return false;
+  }
+
+  $absolutePath = dirname(__DIR__) . DIRECTORY_SEPARATOR .
+    str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
+  return is_file($absolutePath);
+}
+
 $userId = filter_var($_SESSION['user_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 $userRole = strtolower((string) ($_SESSION['role'] ?? ''));
 
@@ -788,7 +806,10 @@ try {
         <h2 class="panel-tab active" id="course-heading">Course Materials</h2>
         <form class="week-body" id="materialForm" method="post" enctype="multipart/form-data">
           <input type="hidden" name="csrf_token" value="<?php echo courseUploadEscape($_SESSION['course_material_upload_csrf']); ?>">
-          <input type="hidden" name="action" value="upload_material">
+          <input type="hidden" name="action" value="<?php echo $editingMaterialId > 0 ? 'update_material' : 'upload_material'; ?>">
+          <?php if ($editingMaterialId > 0): ?>
+            <input type="hidden" name="material_id" value="<?php echo $editingMaterialId; ?>">
+          <?php endif; ?>
           <div class="form-group">
             <label for="materialModule">Module</label>
             <select class="form-control" id="materialModule" name="module_id" required <?php echo !$modules ? 'disabled' : ''; ?>>
@@ -812,21 +833,87 @@ try {
             <input class="form-control" id="materialWeek" name="week_number" type="number" min="1" required value="<?php echo courseUploadEscape($weekNumber); ?>">
           </div>
           <div class="form-group">
-            <label for="materialFile">Course Material File</label>
-            <input class="form-control-file" id="materialFile" name="material_file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip" required>
+            <label for="materialFile"><?php echo $editingMaterialId > 0 ? 'Replace Course Material File (optional)' : 'Course Material File'; ?></label>
+            <input class="form-control-file" id="materialFile" name="material_file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip" <?php echo $editingMaterialId === 0 ? 'required' : ''; ?>>
             <p class="file-status mb-0" id="materialFileStatus" aria-live="polite"></p>
+            <?php if ($editingMaterialId > 0 && courseUploadStoredFileExists($materialCurrentFilePath, 'course_materials')): ?>
+              <small class="form-text text-muted">
+                Current file:
+                <a href="../<?php echo courseUploadEscape($materialCurrentFilePath); ?>">Download current file</a>
+              </small>
+            <?php endif; ?>
           </div>
-          <button class="btn btn-primary btn-sm" type="submit" <?php echo !$modules ? 'disabled' : ''; ?>>Upload Material</button>
+          <button class="btn btn-primary btn-sm" type="submit" <?php echo !$modules ? 'disabled' : ''; ?>>
+            <?php echo $editingMaterialId > 0 ? 'Update Material' : 'Upload Material'; ?>
+          </button>
+          <?php if ($editingMaterialId > 0): ?>
+            <a class="btn btn-outline-secondary btn-sm" href="courseupload.php#materialForm">Cancel Edit</a>
+          <?php endif; ?>
           <small class="form-text text-muted">PDF, Office, text, and ZIP files up to 20 MB are accepted.</small>
         </form>
+
+        <section class="week-body" id="materialList" aria-labelledby="materialListHeading">
+          <h3 class="h5" id="materialListHeading">Manage Course Materials</h3>
+          <?php if (!$courseMaterials): ?>
+            <p class="text-muted mb-0">No course materials are available to manage.</p>
+          <?php else: ?>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">Module</th>
+                    <th scope="col">Week</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php foreach ($courseMaterials as $material): ?>
+                    <tr>
+                      <td><?php echo courseUploadEscape($material['module_code']); ?></td>
+                      <td><?php echo (int) $material['week_number']; ?></td>
+                      <td><?php echo courseUploadEscape($material['title']); ?></td>
+                      <td>
+                        <?php if (courseUploadStoredFileExists($material['file_path'], 'course_materials')): ?>
+                          <a href="../<?php echo courseUploadEscape($material['file_path']); ?>">Download</a>
+                        <?php else: ?>
+                          <span class="text-muted">File unavailable</span>
+                        <?php endif; ?>
+                      </td>
+                      <td>
+                        <a class="btn btn-outline-primary btn-sm"
+                           href="courseupload.php?edit_material=<?php echo (int) $material['material_id']; ?>#materialForm">
+                          Edit
+                        </a>
+                        <form class="d-inline" method="post"
+                              onsubmit="return confirm('Delete this course material? Existing activity history will no longer link to it.');">
+                          <input type="hidden" name="csrf_token" value="<?php echo courseUploadEscape($_SESSION['course_material_upload_csrf']); ?>">
+                          <input type="hidden" name="action" value="delete_material">
+                          <input type="hidden" name="material_id" value="<?php echo (int) $material['material_id']; ?>">
+                          <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            </div>
+          <?php endif; ?>
+        </section>
       </section>
 
       <section class="col-md-6 panel-column assignment-column" aria-labelledby="assignment-heading">
-        <h2 class="panel-tab" id="assignment-heading">Create Assignment</h2>
+        <h2 class="panel-tab" id="assignment-heading">
+          <?php echo $editingAssignmentId > 0 ? 'Edit Assignment' : 'Create Assignment'; ?>
+        </h2>
         <div class="assignment-panel">
           <form class="assignment-details" id="assignmentForm" method="post" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?php echo courseUploadEscape($_SESSION['course_material_upload_csrf']); ?>">
-            <input type="hidden" name="action" value="create_assignment">
+            <input type="hidden" name="action" value="<?php echo $editingAssignmentId > 0 ? 'update_assignment' : 'create_assignment'; ?>">
+            <?php if ($editingAssignmentId > 0): ?>
+              <input type="hidden" name="assignment_id" value="<?php echo $editingAssignmentId; ?>">
+            <?php endif; ?>
             <div class="form-group">
               <label for="assignmentModule">Module</label>
               <select class="form-control" id="assignmentModule" name="module_id" required <?php echo !$modules ? 'disabled' : ''; ?>>
@@ -868,13 +955,74 @@ try {
               </div>
             </div>
             <div class="form-group">
-              <label for="assignmentFile">Assignment File (optional)</label>
+              <label for="assignmentFile"><?php echo $editingAssignmentId > 0 ? 'Replace Assignment File (optional)' : 'Assignment File (optional)'; ?></label>
               <input class="form-control-file" id="assignmentFile" name="assignment_file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.zip">
               <p class="file-status mb-0" id="assignmentFileStatus" aria-live="polite"></p>
+              <?php if ($editingAssignmentId > 0 && courseUploadStoredFileExists($assignmentCurrentFilePath, 'assignments')): ?>
+                <small class="form-text text-muted">
+                  Current file:
+                  <a href="../<?php echo courseUploadEscape($assignmentCurrentFilePath); ?>">Download current file</a>
+                </small>
+              <?php endif; ?>
             </div>
-            <button class="btn btn-primary btn-sm" type="submit" <?php echo !$modules ? 'disabled' : ''; ?>>Create Assignment</button>
+            <button class="btn btn-primary btn-sm" type="submit" <?php echo !$modules ? 'disabled' : ''; ?>>
+              <?php echo $editingAssignmentId > 0 ? 'Update Assignment' : 'Create Assignment'; ?>
+            </button>
+            <?php if ($editingAssignmentId > 0): ?>
+              <a class="btn btn-outline-secondary btn-sm" href="courseupload.php#assignmentForm">Cancel Edit</a>
+            <?php endif; ?>
             <small class="form-text text-muted">Assignment files can be PDF, Office, text, or ZIP files up to 20 MB.</small>
           </form>
+
+          <section class="mt-4" id="assignmentList" aria-labelledby="assignmentListHeading">
+            <h3 class="h5" id="assignmentListHeading">Manage Assignments</h3>
+            <?php if (!$assignments): ?>
+              <p class="text-muted mb-0">No assignments are available to manage.</p>
+            <?php else: ?>
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th scope="col">Module</th>
+                      <th scope="col">Week</th>
+                      <th scope="col">Assignment</th>
+                      <th scope="col">Deadline</th>
+                      <th scope="col">Submissions</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($assignments as $assignment): ?>
+                      <tr>
+                        <td><?php echo courseUploadEscape($assignment['module_code']); ?></td>
+                        <td><?php echo (int) $assignment['week_number']; ?></td>
+                        <td><?php echo courseUploadEscape($assignment['title']); ?></td>
+                        <td><?php echo courseUploadEscape($assignment['deadline']); ?></td>
+                        <td><?php echo (int) $assignment['submission_count']; ?></td>
+                        <td>
+                          <?php if ((int) $assignment['submission_count'] === 0): ?>
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="courseupload.php?edit_assignment=<?php echo (int) $assignment['assignment_id']; ?>#assignmentForm">
+                              Edit
+                            </a>
+                            <form class="d-inline" method="post"
+                                  onsubmit="return confirm('Delete this assignment? This cannot be undone.');">
+                              <input type="hidden" name="csrf_token" value="<?php echo courseUploadEscape($_SESSION['course_material_upload_csrf']); ?>">
+                              <input type="hidden" name="action" value="delete_assignment">
+                              <input type="hidden" name="assignment_id" value="<?php echo (int) $assignment['assignment_id']; ?>">
+                              <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                            </form>
+                          <?php else: ?>
+                            <span class="text-muted">Locked after first submission</span>
+                          <?php endif; ?>
+                        </td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              </div>
+            <?php endif; ?>
+          </section>
         </div>
       </section>
     </div>
