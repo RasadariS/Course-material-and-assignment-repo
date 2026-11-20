@@ -76,7 +76,7 @@ try {
     $actionFilter = '';
   }
 
-  $sql = 'SELECT log_id, material_id, assignment_id, action_type, timestamp, ip_address
+  $sql = 'SELECT log_id, material_id, assignment_id, action_type, timestamp
           FROM activity_logs
           WHERE user_id = ?';
   $parameters = [$userId];
@@ -136,7 +136,6 @@ try {
         <h1 class="page-title mb-1">My Learning Activity</h1>
         <p class="text-muted mb-0">Review your course material and assignment activity.</p>
       </div>
-      <a class="btn btn-outline-primary mt-2 mt-sm-0" href="../course/mycourses.php">My Courses</a>
     </div>
 
     <?php if ($errorMessage !== ''): ?>
@@ -213,7 +212,6 @@ try {
               <th scope="col">Action</th>
               <th scope="col">Material ID</th>
               <th scope="col">Assignment ID</th>
-              <th scope="col">IP address</th>
             </tr>
           </thead>
           <tbody>
@@ -230,7 +228,6 @@ try {
                   <td><?php echo activityPageEscape($activity['action_type']); ?></td>
                   <td><?php echo activityPageEscape($activity['material_id'] ?? '—'); ?></td>
                   <td><?php echo activityPageEscape($activity['assignment_id'] ?? '—'); ?></td>
-                  <td><?php echo activityPageEscape($activity['ip_address'] ?? '—'); ?></td>
                 </tr>
               <?php endforeach; ?>
             <?php endif; ?>
