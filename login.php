@@ -21,6 +21,7 @@ if (empty($_SESSION['login_csrf'])) {
 $errorMessage = '';
 $identifier = '';
 $registrationSuccess = ($_GET['registered'] ?? '') === '1';
+$accountDeactivated = ($_GET['deactivated'] ?? '') === '1';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $submittedToken = $_POST['csrf_token'] ?? '';
@@ -40,11 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
           $pdo = require __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
           $lookup = $pdo->prepare(
-            'SELECT u.user_id, u.full_name, u.password_hash, u.role
+            'SELECT u.user_id, u.full_name, u.password_hash, u.role, u.status
              FROM users u
              LEFT JOIN students s ON s.user_id = u.user_id
-             WHERE (LOWER(u.role) = \'student\' AND s.registration_number = ?)
-                OR (LOWER(u.role) <> \'student\' AND (u.email = ? OR u.nic_number = ?))
+             WHERE ((LOWER(u.role) = \'student\' AND s.registration_number = ?)
+                OR (LOWER(u.role) <> \'student\' AND (u.email = ? OR u.nic_number = ?)))
+               AND u.status = \'active\'
              LIMIT 2'
           );
           $lookup->execute([$identifier, $identifier, $identifier]);
@@ -100,6 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php endif; ?>
       <?php if ($registrationSuccess): ?>
         <div class="alert alert-success" role="status">Your account was created. Sign in to continue.</div>
+      <?php endif; ?>
+      <?php if ($accountDeactivated): ?>
+        <div class="alert alert-info" role="status">Your administrator account is now inactive.</div>
       <?php endif; ?>
       <div class="field-group">
         <div class="field-control">

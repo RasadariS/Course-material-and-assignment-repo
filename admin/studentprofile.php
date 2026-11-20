@@ -20,6 +20,12 @@ $errorMessage = '';
 $successMessage = '';
 $profile = null;
 
+if (($_GET['updated'] ?? '') === '1') {
+  $successMessage = 'Student profile successfully updated.';
+} elseif (($_GET['deleted'] ?? '') === '1') {
+  $successMessage = 'Profile photo successfully deleted.';
+}
+
 if ($userRole !== 'student') {
   http_response_code(403);
   $errorMessage = 'This page is available to student accounts only.';
@@ -54,7 +60,8 @@ if ($userRole !== 'student') {
 
           $clearPhoto = $pdo->prepare('UPDATE students SET profile_photo = NULL WHERE user_id = ?');
           $clearPhoto->execute([$userId]);
-          $successMessage = 'Profile photo deleted.';
+          header('Location: studentprofile.php?deleted=1');
+          exit;
         } else {
           $nicNumber = is_string($_POST['nic_number'] ?? null) ? trim($_POST['nic_number']) : '';
           $fullName = is_string($_POST['full_name'] ?? null) ? trim($_POST['full_name']) : '';
@@ -198,7 +205,8 @@ if ($userRole !== 'student') {
             }
 
             $_SESSION['full_name'] = $fullName;
-            $successMessage = 'Student profile updated successfully.';
+            header('Location: studentprofile.php?updated=1');
+            exit;
           }
         }
       }
@@ -255,10 +263,6 @@ if ($profile && is_string($profile['profile_photo']) &&
     <?php if ($errorMessage !== ''): ?>
       <div class="alert alert-danger" role="alert"><?php echo studentProfileEscape($errorMessage); ?></div>
     <?php endif; ?>
-    <?php if ($successMessage !== ''): ?>
-      <div class="alert alert-success" role="status"><?php echo studentProfileEscape($successMessage); ?></div>
-    <?php endif; ?>
-
     <?php if ($profile): ?>
       <form class="profile-card card border-0 shadow-sm p-4" action="studentprofile.php"
             method="post" enctype="multipart/form-data">
@@ -320,9 +324,10 @@ if ($profile && is_string($profile['profile_photo']) &&
           <a class="profile-button profile-button-view" href="studentprofileview.php">View</a>
           <button class="profile-button profile-button-edit" id="editProfile" type="button"
                   onclick="editStudentProfile()">Edit</button>
-          <button class="profile-button profile-button-update" id="updateProfile" type="submit" disabled>Update</button>
+          <button class="profile-button profile-button-update" id="updateProfile" type="submit" disabled
+                  onclick="return confirm('Do you want to update the database?');">Update</button>
           <button class="profile-button profile-button-delete" type="submit" name="action" value="delete_photo"
-                  onclick="return confirm('Delete your profile photo?');">Delete Photo</button>
+                  onclick="return confirm('Do you want to delete your profile photo from the database?');">Delete Photo</button>
         </div>
       </form>
     <?php endif; ?>
@@ -355,5 +360,11 @@ if ($profile && is_string($profile['profile_photo']) &&
       });
     }
   </script>
+  <?php if ($successMessage !== ''): ?>
+    <script>
+      alert(<?php echo json_encode($successMessage); ?>);
+      window.location.href = '../index.php';
+    </script>
+  <?php endif; ?>
 </body>
 </html>

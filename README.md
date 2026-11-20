@@ -13,6 +13,8 @@ The signup page creates a user and its matching student or instructor row in one
 
 Existing databases missing the `system_administrators` table can apply `database/create_system_administrators_table.sql` in phpMyAdmin or the MySQL command line. To preserve rows from an older `admins` table, apply `database/migrate_admins_to_system_administrators.sql` after creating the new table.
 
+Existing databases must apply `database/add_user_status.sql` once to add an active/inactive account status. New users default to active. Deleting an administrator account from the profile page marks it inactive and prevents future sign-in.
+
 Signed-in students can open `admin/studentprofile.php` to edit their own profile or choose View to open `admin/studentprofileview.php`. Both pages load the student's details from the `users` and `students` tables, including registration number, intake year, semester, and optional profile photo.
 
 Signed-in instructors can open `admin/instructorprofile.php` to view and edit their own profile. The profile page uses the `users` and `instructors` tables; profile photos are optional.

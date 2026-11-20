@@ -25,6 +25,11 @@ if ($userRole !== 'instructor') {
 
   $errorMessage = '';
   $successMessage = '';
+  if (($_GET['updated'] ?? '') === '1') {
+    $successMessage = 'Instructor profile successfully updated.';
+  } elseif (($_GET['deleted'] ?? '') === '1') {
+    $successMessage = 'Profile photo successfully deleted.';
+  }
 
   try {
     $pdo = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.php';
@@ -50,7 +55,8 @@ if ($userRole !== 'instructor') {
 
           $clearPhoto = $pdo->prepare('UPDATE instructors SET profile_photo = NULL WHERE user_id = ?');
           $clearPhoto->execute([$userId]);
-          $successMessage = 'Profile photo deleted.';
+          header('Location: instructorprofile.php?deleted=1');
+          exit;
         } else {
           $nicNumber = trim((string) ($_POST['nic_number'] ?? ''));
           $fullName = trim((string) ($_POST['full_name'] ?? ''));
@@ -126,7 +132,8 @@ if ($userRole !== 'instructor') {
               }
 
               $_SESSION['full_name'] = $fullName;
-              $successMessage = 'Instructor profile updated successfully.';
+              header('Location: instructorprofile.php?updated=1');
+              exit;
             }
           }
         }
@@ -182,10 +189,6 @@ if ($profile && is_string($profile['profile_photo']) &&
     <?php if ($errorMessage !== ''): ?>
       <div class="alert alert-danger" role="alert"><?php echo instructorEscape($errorMessage); ?></div>
     <?php endif; ?>
-    <?php if ($successMessage !== ''): ?>
-      <div class="alert alert-success" role="status"><?php echo instructorEscape($successMessage); ?></div>
-    <?php endif; ?>
-
     <?php if ($profile): ?>
       <form class="card shadow-sm mx-auto" action="instructorprofile.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="<?php echo instructorEscape($_SESSION['instructor_profile_csrf']); ?>">
@@ -240,9 +243,10 @@ if ($profile && is_string($profile['profile_photo']) &&
           <a class="btn btn-secondary mr-2 mb-1" id="viewInstructorProfile" href="instructorprofileview.php">View</a>
           <button class="btn btn-primary mr-2 mb-1" id="editInstructorProfile" type="button"
                   onclick="enableProfileEditing()">Edit</button>
-          <button class="btn btn-success mr-2 mb-1" id="updateInstructorProfile" type="submit" disabled>Update</button>
+          <button class="btn btn-success mr-2 mb-1" id="updateInstructorProfile" type="submit" disabled
+                  onclick="return confirm('Do you want to update the database?');">Update</button>
           <button class="btn btn-danger mb-1" type="submit" name="action" value="delete_photo"
-                  onclick="return confirm('Delete your profile photo?');">Delete Photo</button>
+                  onclick="return confirm('Do you want to delete your profile photo from the database?');">Delete Photo</button>
         </div>
       </form>
     <?php endif; ?>
@@ -262,5 +266,11 @@ if ($profile && is_string($profile['profile_photo']) &&
       document.getElementById('updateInstructorProfile').disabled = false;
     }
   </script>
+  <?php if ($successMessage !== ''): ?>
+    <script>
+      alert(<?php echo json_encode($successMessage); ?>);
+      window.location.href = '../index.php';
+    </script>
+  <?php endif; ?>
 </body>
 </html>
