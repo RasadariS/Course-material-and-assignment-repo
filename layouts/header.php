@@ -47,8 +47,8 @@ $headerEscape = function ($value) {
             </a>
           </li>
         <?php endif; ?>
-        <?php if ($userId !== false && in_array($userRole, ['student', 'instructor'], true)): ?>
-          <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.html'); ?>">My Courses</a></li>
+        <?php if ($userId !== false && $userRole === 'student'): ?>
+          <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/mycourses.php'); ?>">My Courses</a></li>
         <?php endif; ?>
         <?php if ($userId !== false && $userRole === 'instructor'): ?>
           <li class="nav-item"><a class="nav-link px-3" href="<?php echo $headerEscape($headerBasePath . 'course/courseupload.php'); ?>">Course Upload</a></li>

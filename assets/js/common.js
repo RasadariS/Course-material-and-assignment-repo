@@ -179,40 +179,6 @@
     });
 
     },
-    // Form/page: My courses page
-    'course/mycourses.html': function () {
-    function loadPartial(id, file, done) {
-      fetch(file)
-        .then(response => {
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          return response.text();
-        })
-        .then(html => {
-          const placeholder = document.getElementById(id);
-          placeholder.innerHTML = html;
-          const partialUrl = new URL(file, document.baseURI);
-          placeholder.querySelectorAll('[src], [href]').forEach(element => {
-            ['src', 'href'].forEach(attribute => {
-              const value = element.getAttribute(attribute);
-              if (value && !/^(?:[a-z]+:|\/|#)/i.test(value)) {
-                element.setAttribute(attribute, new URL(value, partialUrl).href);
-              }
-            });
-          });
-          if (done) done();
-        })
-        .catch(error => console.error(`Error loading ${file}:`, error));
-    }
-
-    loadPartial('header-placeholder', '../layouts/header.php');
-    loadPartial('footer-placeholder', '../layouts/footer.php', function () {
-      const footerYear = document.getElementById('footerYear');
-      if (footerYear) {
-        footerYear.textContent = new Date().getFullYear();
-      }
-    });
-  
-    },
     // Form/page: Welcome page
     'index.php': function () {
     const footerYear = document.getElementById('footerYear');
