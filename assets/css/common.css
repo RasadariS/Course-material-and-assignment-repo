@@ -374,30 +374,30 @@ body.page-instructor-instructorenrolement-php { min-height: 100vh; display: flex
 			body.page-instructor-instructorenrolement-php .module-state { white-space: normal; text-align: right; }
 		}
 
-/* Form/page: Student interaction report (instructor/studentinteraction.html). */
-body.page-instructor-studentinteraction-html { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
-		body.page-instructor-studentinteraction-html main { flex: 1; }
-		body.page-instructor-studentinteraction-html .page-title { font-size: 1.6rem; font-weight: 700; }
-		body.page-instructor-studentinteraction-html .summary-card { height: 100%; border-top: 3px solid #087f8c; }
-		body.page-instructor-studentinteraction-html .summary-card.submissions { border-top-color: #d17b27; }
-		body.page-instructor-studentinteraction-html .summary-label { color: #59636e; font-size: 0.9rem; }
-		body.page-instructor-studentinteraction-html .summary-value { margin: 0; font-size: 1.7rem; font-weight: 700; }
-		body.page-instructor-studentinteraction-html .summary-column { flex: 0 0 20%; max-width: 20%; }
-		body.page-instructor-studentinteraction-html .interaction-table th, body.page-instructor-studentinteraction-html .interaction-table td { vertical-align: middle; }
-		body.page-instructor-studentinteraction-html .interaction-table td { overflow-wrap: anywhere; }
-		body.page-instructor-studentinteraction-html .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
-		body.page-instructor-studentinteraction-html .timing { font-weight: 600; white-space: nowrap; }
-		body.page-instructor-studentinteraction-html .timing-early { color: #087f8c; }
-		body.page-instructor-studentinteraction-html .timing-on-time { color: #26733d; }
-		body.page-instructor-studentinteraction-html .timing-late { color: #b02a37; }
-		body.page-instructor-studentinteraction-html .timing-na { color: #6c757d; }
-	body.page-instructor-studentinteraction-html @media (max-width: 1199.98px) {
-			body.page-instructor-studentinteraction-html .summary-column { flex: 0 0 33.333333%; max-width: 33.333333%; }
-		}
-	body.page-instructor-studentinteraction-html @media (max-width: 575.98px) {
-			body.page-instructor-studentinteraction-html .summary-column { flex: 0 0 50%; max-width: 50%; }
-			body.page-instructor-studentinteraction-html .filter-actions { display: flex; gap: 0.5rem; }
-			body.page-instructor-studentinteraction-html .filter-actions .btn { flex: 1; }
+/* Form/page: Student interaction report (instructor/studentinteraction.php). */
+body.page-instructor-studentinteraction-php { min-height: 100vh; display: flex; flex-direction: column; color: #212529; }
+		body.page-instructor-studentinteraction-php main { flex: 1; }
+		body.page-instructor-studentinteraction-php .page-title { font-size: 1.6rem; font-weight: 700; }
+		body.page-instructor-studentinteraction-php .summary-card { height: 100%; border-top: 3px solid #087f8c; }
+		body.page-instructor-studentinteraction-php .summary-card.submissions { border-top-color: #d17b27; }
+		body.page-instructor-studentinteraction-php .summary-label { color: #59636e; font-size: 0.9rem; }
+		body.page-instructor-studentinteraction-php .summary-value { margin: 0; font-size: 1.7rem; font-weight: 700; }
+		body.page-instructor-studentinteraction-php .summary-column { flex: 0 0 20%; max-width: 20%; }
+		body.page-instructor-studentinteraction-php .interaction-table th, body.page-instructor-studentinteraction-php .interaction-table td { vertical-align: middle; }
+		body.page-instructor-studentinteraction-php .interaction-table td { overflow-wrap: anywhere; }
+		body.page-instructor-studentinteraction-php .empty-state { padding: 2rem 1rem; color: #6c757d; text-align: center; }
+		body.page-instructor-studentinteraction-php .timing { font-weight: 600; white-space: nowrap; }
+		body.page-instructor-studentinteraction-php .timing-early { color: #087f8c; }
+		body.page-instructor-studentinteraction-php .timing-on-time { color: #26733d; }
+		body.page-instructor-studentinteraction-php .timing-late { color: #b02a37; }
+		body.page-instructor-studentinteraction-php .timing-na { color: #6c757d; }
+	@media (max-width: 1199.98px) {
+		body.page-instructor-studentinteraction-php .summary-column { flex: 0 0 33.333333%; max-width: 33.333333%; }
+	}
+	@media (max-width: 575.98px) {
+		body.page-instructor-studentinteraction-php .summary-column { flex: 0 0 50%; max-width: 50%; }
+		body.page-instructor-studentinteraction-php .filter-actions { display: flex; gap: 0.5rem; }
+		body.page-instructor-studentinteraction-php .filter-actions .btn { flex: 1; }
 		}
 
 /* Form/page: Shared footer (layouts/footer.php). */
